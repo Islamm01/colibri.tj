@@ -1,0 +1,481 @@
+{
+  "brand": {
+    "name": "Colibri",
+    "tagline": "Локальный маркетплейс Худжанда"
+  },
+  "header": {
+    "location": "Худжанд",
+    "changeLocation": "Изменить"
+  },
+  "nav": {
+    "home": "Главная",
+    "search": "Поиск",
+    "cart": "Корзина",
+    "orders": "Заказы",
+    "profile": "Профиль"
+  },
+  "home": {
+    "greeting": "Салом",
+    "greetingNamed": "Салом, {name}",
+    "greetingQuestion": "Что закажем сегодня?",
+    "searchPlaceholder": "Фрукты, орехи, доставка...",
+    "trustFast": "30 мин",
+    "trustNoReg": "Без регистрации",
+    "trustAllDay": "24/7",
+    "availableNow": "Доступно сейчас",
+    "ecosystemTitle": "Экосистема Colibri",
+    "ecosystemSubtitle": "Мы строим локальный маркетплейс Худжанда шаг за шагом",
+    "comingSoon": "Скоро",
+    "online": "ОНЛАЙН",
+    "notifyMe": "Сообщить",
+    "partnerTitle": "У вас свой магазин?",
+    "partnerSubtitle": "Станьте партнёром — до запуска",
+    "partnerCta": "Подать заявку",
+    "chips": {
+      "all": "Все",
+      "fruits": "Фрукты",
+      "vegetables": "Овощи",
+      "nuts": "Орехи",
+      "berries": "Ягоды"
+    }
+  },
+  "whyColibri": {
+    "eyebrow": "Почему Colibri",
+    "headline": "То, что действительно важно",
+    "tagline": "Мы делаем простые вещи хорошо — чтобы вы были уверены в каждом заказе.",
+    "benefits": {
+      "fresh": {
+        "title": "Свежие фрукты",
+        "hint": "Прямо из садов Худжанда"
+      },
+      "cashOnDelivery": {
+        "title": "Оплата при получении",
+        "hint": "Наличные или онлайн — на ваш выбор"
+      },
+      "fairPrices": {
+        "title": "Честные цены",
+        "hint": "Без накруток — выигрывают все"
+      },
+      "fastDelivery": {
+        "title": "До 60 минут",
+        "hint": "Быстрая доставка по Худжанду"
+      },
+      "qualityGuarantee": {
+        "title": "Гарантия качества",
+        "hint": "Не понравилось — вернём"
+      }
+    }
+  },
+  "support": {
+    "aria": "Telegram-поддержка",
+    "tooltip": "Написать в Telegram",
+    "footerTitle": "Поддержка в Telegram",
+    "footerHint": "Есть вопрос? Напишите нам",
+    "tagline": "Худжанд от самого Худжанда"
+  },
+  "parcel": {
+    "title": "Отправить посылку",
+    "subtitle": "Из точки А в точку Б — быстро и надёжно",
+    "fixedPriceBanner": "Фиксированная цена {price} сом по Худжанду",
+    "som": "сом",
+    "senderFallback": "Отправитель",
+    "fragile": "Хрупкая посылка",
+    "mapConfirm": "Подтвердить",
+    "pickup": {
+      "section": "Откуда забрать",
+      "addressPlaceholder": "Адрес забора",
+      "pinned": "Точка отмечена на карте",
+      "namePlaceholder": "Имя отправителя (необязательно)",
+      "phonePlaceholder": "Телефон отправителя (необязательно)",
+      "mapTitle": "Укажите точку забора",
+      "detailsPlaceholder": "Подъезд, этаж (необязательно)"
+    },
+    "dropoff": {
+      "section": "Куда доставить",
+      "addressPlaceholder": "Адрес доставки",
+      "pinned": "Точка отмечена на карте",
+      "namePlaceholder": "Имя получателя",
+      "phonePlaceholder": "Телефон получателя",
+      "mapTitle": "Укажите точку доставки",
+      "detailsPlaceholder": "Подъезд, этаж (необязательно)"
+    },
+    "mapHint": {
+      "pickup": "Откуда забрать посылку?",
+      "dropoff": "Куда доставить посылку?"
+    },
+    "contents": {
+      "section": "О посылке",
+      "descPlaceholder": "Что в посылке? (необязательно)"
+    },
+    "payment": {
+      "sectionWithPrice": "Оплата ({price} сом)",
+      "section": "Оплата",
+      "cash": "Наличные курьеру",
+      "qr": "QR-оплата",
+      "transfer": "Перевод по номеру",
+      "qrHint": "Алиф Моби, Корти Милли",
+      "payerSender": "Платит отправитель",
+      "payerRecipient": "Платит получатель"
+    },
+    "submit": "Отправить",
+    "submitting": "Отправка...",
+    "errors": {
+      "invalid_pickup_location": "Укажите точку забора на карте",
+      "invalid_dropoff_location": "Укажите точку доставки на карте",
+      "invalid_dropoff_name": "Укажите имя получателя",
+      "invalid_dropoff_phone": "Неверный телефон получателя",
+      "too_far": "Расстояние больше допустимого",
+      "generic": "Произошла ошибка. Попробуйте ещё раз."
+    },
+    "chooseOnMap": "Выбрать на карте",
+    "weight": {
+      "section": "Вес",
+      "light": "До 5 кг",
+      "heavy": "5–15 кг"
+    },
+    "price": {
+      "pickAddresses": "Укажите оба адреса"
+    }
+  },
+  "orders": {
+    "title": "Мои заказы",
+    "subtitle": "{count} заказ(ов)",
+    "emptyTitle": "Здесь пока пусто",
+    "emptyHint": "Выберите что-нибудь на маркетплейсе или отправьте посылку.",
+    "signedOutHint": "Чтобы видеть заказы, оформите заказ с вашим номером телефона.",
+    "foodOrder": "Фрукты и орехи",
+    "parcelOrder": "Доставка посылок"
+  },
+  "profile": {
+    "guestName": "Гость",
+    "guestHint": "Закажите без регистрации",
+    "language": "Язык",
+    "myOrders": "Мои заказы",
+    "becomeCourier": "Стать курьером",
+    "becomeCourierHint": "Работайте в свободное время",
+    "becomePartner": "Стать партнёром",
+    "becomePartnerHint": "Откройте свой магазин в Colibri",
+    "staffPortal": "Кабинет для сотрудников",
+    "staffPortalHint": "Магазин · Оператор · Курьер"
+  },
+  "partner": {
+    "back": "Назад",
+    "title": "Станьте партнёром",
+    "subtitle": "Расскажите о своём бизнесе — мы свяжемся в течение 1-2 дней.",
+    "businessSection": "Бизнес",
+    "businessNamePlaceholder": "Название магазина или компании",
+    "verticalSection": "Категория",
+    "categoryPlaceholder": "Что продаёте? (например: сухофрукты, лекарства)",
+    "contactSection": "Контакты",
+    "contactNamePlaceholder": "Ваше имя",
+    "addressPlaceholder": "Адрес (если есть магазин)",
+    "aboutSection": "О себе",
+    "aboutPlaceholder": "Расскажите о бизнесе: сколько лет работаете, чем особенны...",
+    "verticals": {
+      "fruits": "Фрукты и орехи",
+      "pharmacy": "Аптека",
+      "agro": "Агро",
+      "other": "Другое"
+    },
+    "submit": "Отправить заявку",
+    "submitting": "Отправка...",
+    "success": {
+      "title": "Спасибо за заявку!",
+      "hint": "Мы получили вашу заявку. Свяжемся с вами в течение 1-2 рабочих дней."
+    },
+    "errors": {
+      "invalid_business_name": "Укажите название бизнеса",
+      "invalid_contact_name": "Укажите имя",
+      "invalid_phone": "Неверный номер телефона",
+      "generic": "Произошла ошибка. Попробуйте ещё раз."
+    }
+  },
+  "verticals": {
+    "fruits": {
+      "title": "Фрукты и сухофрукты",
+      "subtitle": "Прямо из садов Худжанда",
+      "stat1": "{count} магазинов",
+      "stat2": "30 мин"
+    },
+    "parcel": {
+      "title": "Доставка посылок",
+      "subtitle": "Из точки в точку, за час",
+      "stat1": "от 15 сом",
+      "stat2": "60 мин"
+    },
+    "pharmacy": {
+      "title": "Аптека",
+      "subtitle": "Лекарства на дом",
+      "month": "МАРТ"
+    },
+    "agro": {
+      "title": "Агро",
+      "subtitle": "Семена, удобрения",
+      "month": "АПРЕЛЬ"
+    },
+    "garden": {
+      "title": "Сад",
+      "subtitle": "Инструменты, саженцы",
+      "month": "МАЙ"
+    },
+    "farmers": {
+      "title": "Фермеры",
+      "subtitle": "Напрямую из сада",
+      "month": "ИЮНЬ"
+    }
+  },
+  "marketplace": {
+    "title": "Фрукты и орехи",
+    "subtitle": "Свежие, локальные, за 30 минут",
+    "stores": "Магазины",
+    "products": "Товары",
+    "openUntil": "До {time}",
+    "closed": "Закрыто",
+    "perKg": "за кг",
+    "perPiece": "за шт",
+    "perPack": "за упаковку",
+    "addToCart": "В корзину",
+    "added": "Добавлено",
+    "outOfStock": "Нет в наличии",
+    "category": {
+      "fresh": "Свежие фрукты",
+      "dried": "Орехи и сухофрукты",
+      "berries": "Ягоды",
+      "citrus": "Цитрусовые"
+    },
+    "newStore": "Новый",
+    "minutesSuffix": "мин"
+  },
+  "cart": {
+    "title": "Ваша корзина",
+    "empty": "Корзина пуста",
+    "emptyHint": "Выберите свежие фрукты Худжанда",
+    "browse": "К маркетплейсу",
+    "items": "{count, plural, =0 {нет товаров} one {# товар} few {# товара} other {# товаров}}",
+    "subtotal": "Сумма",
+    "delivery": "Доставка",
+    "deliveryFree": "Бесплатно",
+    "deliveryEstimate": "примерно",
+    "total": "Итого",
+    "freeDeliveryProgress": "Ещё {amount} сом — доставка бесплатно",
+    "freeDeliveryReached": "🎉 Ваша доставка бесплатна",
+    "checkout": "Оформить",
+    "remove": "Убрать",
+    "clear": "Очистить"
+  },
+  "product": {
+    "addedToCart": "Добавлено в корзину",
+    "inCart": "В корзине",
+    "weighedAtDelivery": "Взвешивается весами при выдаче",
+    "freshFrom": "Свежие из",
+    "description": "Описание"
+  },
+  "currency": {
+    "som": "сом"
+  },
+  "checkout": {
+    "title": "Оформление",
+    "contactSection": "Контакты",
+    "addressSection": "Адрес",
+    "paymentSection": "Способ оплаты",
+    "notesSection": "Комментарий курьеру",
+    "phone": "Номер телефона",
+    "phonePlaceholder": "+992 92 123 45 67",
+    "phoneInvalid": "Неверный номер",
+    "name": "Имя",
+    "namePlaceholder": "Как вас зовут",
+    "nameInvalid": "Имя должно быть от 2 символов",
+    "useMyLocation": "Использовать моё местоположение",
+    "locationDenied": "Доступ запрещён — выберите точку на карте",
+    "locating": "Определяем...",
+    "addressOnMap": "Поставьте точку на карте",
+    "addressHint": "Ориентир, дом, этаж",
+    "addressHintPlaceholder": "напр. рядом с зелёной мечетью",
+    "addressDetails": "Адрес (квартира, этаж, домофон)",
+    "addressDetailsPlaceholder": "Например: квартира 12, этаж 3",
+    "paymentCash": "Наличные",
+    "paymentCashHint": "При получении",
+    "paymentQr": "По QR",
+    "paymentQrHint": "С банковской карты",
+    "paymentBank": "Перевод",
+    "paymentBankHint": "На банковский счёт",
+    "notesPlaceholder": "Ориентир или указание для курьера",
+    "summarySection": "Итого",
+    "placing": "Оформление...",
+    "placeOrder": "Оформить заказ",
+    "welcomeBack": "С возвращением, {name}",
+    "savedAddresses": "Прошлые адреса",
+    "useThisAddress": "Использовать",
+    "errors": {
+      "invalid_phone": "Неверный номер",
+      "invalid_name": "Проверьте имя",
+      "invalid_address": "Уточните адрес",
+      "missing_address_text": "Введите ориентир",
+      "empty_cart": "Корзина пуста",
+      "store_unavailable": "Магазин сейчас недоступен",
+      "insufficient_stock": "Товара недостаточно",
+      "product_unavailable": "Товар недоступен",
+      "generic": "Произошла ошибка. Попробуйте ещё раз"
+    },
+    "addressPlaceholder": "Улица, дом...",
+    "chooseOnMap": "На карте",
+    "mapTitle": "Укажите адрес на карте",
+    "mapConfirm": "Подтвердить",
+    "subtotal": "Сумма",
+    "delivery": "Доставка",
+    "total": "Итого"
+  },
+  "track": {
+    "title": "Ваш заказ",
+    "code": "Код заказа",
+    "notFound": "Заказ не найден",
+    "callStore": "Позвонить в магазин",
+    "estimatedArrival": "Примерное время",
+    "minutes": "мин",
+    "items": "Товары",
+    "deliveryAddress": "Адрес доставки",
+    "paymentMethod": "Оплата",
+    "needToPay": "Нужно оплатить",
+    "qrPlaceholder": "Отсканируйте QR для оплаты",
+    "iHavePaid": "Я оплатил",
+    "bankDetails": "Банковские реквизиты",
+    "bankAccount": "Счёт: 22402 9720 4001 1234",
+    "bankName": "Алиф Банк",
+    "bankReference": "В комментарии: {code}",
+    "status": {
+      "pending_payment": "Ожидает оплаты",
+      "placed": "Принят",
+      "accepted": "Подтверждён",
+      "preparing": "Готовится",
+      "ready": "Готов",
+      "courier_assigned": "Курьер назначен",
+      "picked_up": "В пути",
+      "delivered": "Доставлен",
+      "cancelled": "Отменён"
+    },
+    "paymentChecking": "Проверяем оплату",
+    "paymentCheckingHint": "Мы подтвердим ваш платёж",
+    "paymentError": "Ошибка. Попробуйте ещё раз.",
+    "qrNotConfigured": "QR пока не настроен",
+    "bankNotConfigured": "Реквизиты пока не указаны",
+    "referencePlaceholder": "Номер транзакции (необязательно)",
+    "subtotal": "Сумма",
+    "delivery": "Доставка",
+    "total": "Итого",
+    "courierOnMap": "Курьер"
+  },
+  "common": {
+    "back": "Назад",
+    "loading": "Загрузка...",
+    "retry": "Повторить",
+    "error": "Произошла ошибка",
+    "soon": "Скоро"
+  },
+  "prices": {
+    "eyebrow": "Ежедневные цены",
+    "title": "Цены Худжанда сегодня",
+    "subtitle": "Честная цена — от сада до базара. Прозрачно, обновляется каждый день.",
+    "updated": "Обновлено",
+    "farmGate": "У фермера",
+    "bazaar": "Базар",
+    "som": "сом",
+    "empty": "Цены пока недоступны",
+    "category": {
+      "fruit": "Фрукты",
+      "dried": "Сухофрукты",
+      "nut": "Орехи",
+      "vegetable": "Овощи"
+    },
+    "spreadTitle": "Почему это важно?",
+    "spreadBody": "Разница между ценой сада и базара — это то, что забирают посредники. Colibri сокращает эту разницу: садовод получает больше, вы платите меньше.",
+    "disclaimer": "Цены ориентировочные, собраны по данным базаров Худжанда. Могут меняться.",
+    "indexTitle": "Индекс рынка",
+    "indexHint": "Средняя цена базара",
+    "range7": "7 дней",
+    "range30": "30 дней",
+    "noHistory": "Недостаточно данных для графика"
+  },
+  "courierApply": {
+    "back": "Назад",
+    "eyebrow": "Присоединяйтесь к команде",
+    "title": "Станьте курьером Colibri",
+    "subtitle": "Работайте в свободное время, зарабатывайте каждый день. Подайте заявку сейчас.",
+    "conditionsTitle": "Условия и возможности",
+    "conditions": {
+      "earnings": {
+        "title": "Хороший доход",
+        "hint": "Оплата за каждую доставку"
+      },
+      "flexible": {
+        "title": "Свободный график",
+        "hint": "Вы сами выбираете время"
+      },
+      "phone": {
+        "title": "Только телефон",
+        "hint": "Достаточно приложения Colibri"
+      },
+      "vehicle": {
+        "title": "Мото или велосипед",
+        "hint": "На своём транспорте"
+      },
+      "fast": {
+        "title": "Быстрые заказы",
+        "hint": "Получаете ближайший заказ"
+      },
+      "fair": {
+        "title": "Честные условия",
+        "hint": "Прозрачно, без обмана"
+      }
+    },
+    "requirementsNote": "Требования: возраст от 18 лет, смартфон, транспорт (мото/велосипед/авто) или готовность пешком в центре. После одобрения мы выдадим вам логин и пароль.",
+    "readyButton": "Я готов — подать заявку",
+    "backToConditions": "К условиям",
+    "form": {
+      "name": "Имя и фамилия",
+      "namePlaceholder": "Имя и фамилия",
+      "phone": "Телефон",
+      "vehicle": "Транспорт",
+      "vehicles": {
+        "moto": "Мото",
+        "bike": "Велик",
+        "car": "Авто",
+        "foot": "Пешком"
+      },
+      "district": "Район",
+      "districtPlaceholder": "В каком районе работаете?",
+      "about": "О себе",
+      "aboutPlaceholder": "Опыт, время работы, почему хотите...",
+      "submit": "Отправить заявку"
+    },
+    "done": {
+      "title": "Заявка принята!",
+      "hint": "Мы свяжемся с вами за 1-2 дня и выдадим логин и пароль."
+    },
+    "errors": {
+      "invalid_name": "Укажите имя и фамилию",
+      "invalid_phone": "Неверный номер телефона",
+      "terms_not_accepted": "Примите условия",
+      "generic": "Произошла ошибка. Попробуйте ещё раз."
+    }
+  },
+  "reviews": {
+    "title": "Отзывы",
+    "writeButton": "Оставить отзыв",
+    "empty": "Пока нет отзывов. Будьте первым!",
+    "count": "{count} отзывов",
+    "anon": "Клиент",
+    "modalTitle": "Оцените магазин",
+    "modalHint": "Поделитесь опытом с другими",
+    "pickRating": "Пожалуйста, поставьте оценку",
+    "commentPlaceholder": "Ваш комментарий (необязательно)",
+    "cancel": "Отмена",
+    "submit": "Отправить",
+    "errors": {
+      "not_signed_in": "Сначала войдите",
+      "no_delivered_order": "Только после доставленного заказа",
+      "already_reviewed": "Вы уже оставили отзыв",
+      "invalid_rating": "Неверная оценка",
+      "generic": "Произошла ошибка."
+    }
+  }
+}

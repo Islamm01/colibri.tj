@@ -1,0 +1,233 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-fig: 1 71 55;        /* deep emerald #014737 */
+    --color-gold: 200 241 105;   /* fresh lime #C8F169 */
+    --color-cream: 248 246 241;  /* warm ivory #F8F6F1 */
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply text-ink antialiased;
+    background: #071E15;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01';
+    overscroll-behavior-y: none;
+  }
+
+  .safe-bottom { padding-bottom: max(0.875rem, env(safe-area-inset-bottom)); }
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+
+  .grain { position: relative; }
+  .grain::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: 0.02; mix-blend-mode: multiply;
+  }
+}
+
+@layer components {
+
+  /* ============================================================
+     DARK CUSTOMER APP — the deep-forest canvas from the reference.
+     Applied on the customer layout wrapper (.dark-app). Staff stays light.
+     ============================================================ */
+  .dark-app {
+    background:
+      radial-gradient(120% 50% at 50% -6%, rgba(200, 241, 105, 0.05) 0%, transparent 52%),
+      linear-gradient(180deg, #0C2A1E 0%, #071E15 100%);
+    color: #EAF3EF;
+    min-height: 100dvh;
+  }
+  /* Raised dark surface (cards, sheets) */
+  .surface {
+    background: linear-gradient(168deg, #103325 0%, #0E2D21 100%);
+    border: 1px solid rgba(200, 241, 105, 0.06);
+  }
+  .surface-soft {
+    background: rgba(22, 65, 47, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  /* Frosted dark glass (header, controls over photos) */
+  .glass-forest {
+    background: rgba(12, 42, 30, 0.72);
+    backdrop-filter: saturate(160%) blur(16px);
+    -webkit-backdrop-filter: saturate(160%) blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  /* Circular control button on dark (back, share, favorite) */
+  .ctrl-dark {
+    background: rgba(16, 51, 37, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #EAF3EF;
+    backdrop-filter: blur(8px);
+  }
+
+  /* ============================================================
+     EMERALD HERO — deep cinematic gradient block with soft glow.
+     Use on hero sections / dark panels.
+     ============================================================ */
+  .emerald-hero {
+    background:
+      radial-gradient(120% 80% at 78% 8%, rgba(200, 241, 105, 0.14) 0%, transparent 46%),
+      radial-gradient(130% 90% at 18% 96%, rgba(10, 92, 70, 0.55) 0%, transparent 55%),
+      linear-gradient(158deg, #0A5C46 0%, #014737 52%, #052E25 100%);
+    color: #F8F6F1;
+  }
+  .emerald-panel {
+    background: linear-gradient(160deg, #014737 0%, #052E25 100%);
+    color: #F8F6F1;
+  }
+
+  /* ============================================================
+     GLASSMORPHISM — frosted surfaces (light + on-emerald variants)
+     ============================================================ */
+  .glass-header {
+    background: rgba(248, 246, 241, 0.78);
+    backdrop-filter: saturate(170%) blur(18px);
+    -webkit-backdrop-filter: saturate(170%) blur(18px);
+    border-bottom: 0.5px solid rgba(1, 71, 55, 0.08);
+  }
+  .glass {
+    background: rgba(255, 255, 255, 0.66);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+  .glass-dark {
+    background: rgba(5, 46, 37, 0.42);
+    backdrop-filter: saturate(160%) blur(16px);
+    -webkit-backdrop-filter: saturate(160%) blur(16px);
+    border: 1px solid rgba(248, 246, 241, 0.14);
+  }
+
+  /* ============================================================
+     PRIMARY BUTTON — deep emerald with lime glow. Luxury presence.
+     ============================================================ */
+  .btn-fig {
+    position: relative;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 44%),
+      linear-gradient(158deg, #0A5C46 0%, #014737 58%, #052E25 100%);
+    color: #F8F6F1;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.10) inset,
+      0 10px 26px -10px rgba(1, 71, 55, 0.65),
+      0 3px 8px -2px rgba(5, 46, 37, 0.35);
+    transition: transform 180ms cubic-bezier(0.21,0.61,0.35,1), box-shadow 240ms ease, filter 240ms ease;
+  }
+  .btn-fig:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.14) inset,
+      0 18px 38px -12px rgba(1, 71, 55, 0.7),
+      0 6px 14px -3px rgba(5, 46, 37, 0.4),
+      0 0 0 1px rgba(200, 241, 105, 0.12);
+  }
+  .btn-fig:active { transform: translateY(0) scale(0.985); }
+
+  /* ============================================================
+     LIME BUTTON — the fresh accent CTA. High-energy, premium.
+     (Kept the .btn-gold name; now luminous lime.)
+     ============================================================ */
+  .btn-gold {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0) 50%),
+      linear-gradient(158deg, #D7F87E 0%, #C8F169 52%, #AEE048 100%);
+    color: #0A3325;
+    font-weight: 700;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.45) inset,
+      0 12px 30px -8px rgba(200, 241, 105, 0.55),
+      0 4px 10px -2px rgba(151, 196, 47, 0.35);
+    transition: transform 180ms cubic-bezier(0.21,0.61,0.35,1), box-shadow 240ms ease, filter 240ms ease;
+  }
+  .btn-gold:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.04) saturate(1.05);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.55) inset,
+      0 20px 44px -10px rgba(200, 241, 105, 0.7),
+      0 6px 14px -3px rgba(151, 196, 47, 0.45);
+  }
+  .btn-gold:active { transform: translateY(0) scale(0.985); }
+
+  /* BERRY button — for high-emphasis commerce CTAs (Add to cart) */
+  .btn-berry {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 46%),
+      linear-gradient(158deg, #FF6B77 0%, #FF4F5E 55%, #E63B49 100%);
+    color: #FFFFFF;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.22) inset,
+      0 10px 26px -8px rgba(255, 79, 94, 0.5),
+      0 3px 8px -2px rgba(230, 59, 73, 0.32);
+    transition: transform 180ms cubic-bezier(0.21,0.61,0.35,1), box-shadow 240ms ease, filter 240ms ease;
+  }
+  .btn-berry:hover { transform: translateY(-2px); filter: brightness(1.05); }
+  .btn-berry:active { transform: translateY(0) scale(0.985); }
+
+  /* Outline button — secondary, on ivory */
+  .btn-outline {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1.5px solid rgba(1, 71, 55, 0.18);
+    color: #014737;
+    transition: all 200ms ease;
+  }
+  .btn-outline:hover { background: rgba(1, 71, 55, 0.05); border-color: rgba(1, 71, 55, 0.34); }
+
+  /* Floating pill — for floating bottom nav / floating controls */
+  .float-pill {
+    background: rgba(5, 46, 37, 0.92);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    box-shadow: 0 18px 50px -16px rgba(5, 46, 37, 0.55), 0 6px 16px -6px rgba(5,46,37,0.4);
+    border: 1px solid rgba(248, 246, 241, 0.10);
+  }
+
+  /* Card hover lift */
+  .card-lift { transition: transform 280ms cubic-bezier(0.21,0.61,0.35,1), box-shadow 280ms cubic-bezier(0.21,0.61,0.35,1); will-change: transform; }
+  .card-lift:hover { transform: translateY(-4px); }
+
+  /* Lime hairline divider */
+  .rule-gold { height: 1px; background: linear-gradient(90deg, transparent, rgba(200, 241, 105, 0.5), transparent); }
+
+  /* Soft glow halo behind hero imagery */
+  .glow-halo { position: relative; }
+  .glow-halo::before {
+    content: ''; position: absolute; inset: -12% -8% 0 -8%;
+    background: radial-gradient(60% 55% at 50% 42%, rgba(200,241,105,0.22) 0%, transparent 70%);
+    filter: blur(8px); z-index: 0; pointer-events: none;
+  }
+
+  .stagger > * { animation: fadeUp 0.6s cubic-bezier(0.21,0.61,0.35,1) both; }
+  .stagger > *:nth-child(1){animation-delay:.05s}
+  .stagger > *:nth-child(2){animation-delay:.12s}
+  .stagger > *:nth-child(3){animation-delay:.19s}
+  .stagger > *:nth-child(4){animation-delay:.26s}
+  .stagger > *:nth-child(5){animation-delay:.33s}
+  .stagger > *:nth-child(6){animation-delay:.40s}
+  .stagger > *:nth-child(7){animation-delay:.47s}
+  .stagger > *:nth-child(8){animation-delay:.54s}
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  .animate-fade-in { animation: fadeIn .4s ease both; }
+  .animate-fade-up { animation: fadeUp .6s cubic-bezier(0.21,0.61,0.35,1) both; }
+  @keyframes pop { 0%{opacity:0;transform:scale(.85)} 60%{transform:scale(1.04)} 100%{opacity:1;transform:scale(1)} }
+  .animate-pop { animation: pop .4s cubic-bezier(0.21,0.61,0.35,1) both; }
+  @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+  .animate-slide-up { animation: slideUp .35s cubic-bezier(0.21,0.61,0.35,1) both; }
+  @keyframes glowPulse { 0%,100%{opacity:.6} 50%{opacity:1} }
+}

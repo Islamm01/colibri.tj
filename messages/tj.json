@@ -1,0 +1,481 @@
+{
+  "brand": {
+    "name": "Colibri",
+    "tagline": "Бозори маҳаллии Хуҷанд"
+  },
+  "header": {
+    "location": "Хуҷанд",
+    "changeLocation": "Тағйир додан"
+  },
+  "nav": {
+    "home": "Асосӣ",
+    "search": "Ҷустуҷӯ",
+    "cart": "Сабад",
+    "orders": "Фармоиш",
+    "profile": "Ман"
+  },
+  "home": {
+    "greeting": "Салом",
+    "greetingNamed": "Салом, {name}",
+    "greetingQuestion": "Чӣ мехоҳед имрӯз?",
+    "searchPlaceholder": "Меваҳо, чормағз, расондан...",
+    "trustFast": "30 дақ",
+    "trustNoReg": "Бе бақайдгирӣ",
+    "trustAllDay": "24/7",
+    "availableNow": "Дастрас ҳозир",
+    "ecosystemTitle": "Экосистемаи Colibri",
+    "ecosystemSubtitle": "Мо бозори маҳаллии Хуҷандро қадам ба қадам месозем",
+    "comingSoon": "Ба зудӣ",
+    "online": "ОНЛАЙН",
+    "notifyMe": "Хабар диҳед",
+    "partnerTitle": "Соҳиби фурӯшгоҳ ҳастед?",
+    "partnerSubtitle": "Шарик шавед — пеш аз кушодан",
+    "partnerCta": "Ариза диҳед",
+    "chips": {
+      "all": "Ҳама",
+      "fruits": "Меваҳо",
+      "vegetables": "Сабзавот",
+      "nuts": "Чормағз",
+      "berries": "Буттамева"
+    }
+  },
+  "whyColibri": {
+    "eyebrow": "Чаро Colibri",
+    "headline": "Чизе ки муҳим аст",
+    "tagline": "Мо чизҳои оддиро хуб мекунем — то шумо боварии комил дошта бошед.",
+    "benefits": {
+      "fresh": {
+        "title": "Меваҳои тоза",
+        "hint": "Мустақим аз боғҳои Хуҷанд"
+      },
+      "cashOnDelivery": {
+        "title": "Пардохт ҳангоми қабул",
+        "hint": "Нақд ё онлайн — ихтиёри шумо"
+      },
+      "fairPrices": {
+        "title": "Нархҳои одилона",
+        "hint": "Бе зиёда — ҳарду тараф ғолиб"
+      },
+      "fastDelivery": {
+        "title": "То 60 дақиқа",
+        "hint": "Расондани зуд дар Хуҷанд"
+      },
+      "qualityGuarantee": {
+        "title": "Кафолати сифат",
+        "hint": "Маҳсулот наҳамворӣ - бозгардонед"
+      }
+    }
+  },
+  "support": {
+    "aria": "Telegram-дастгирӣ",
+    "tooltip": "Дастгирӣ дар Telegram",
+    "footerTitle": "Дастгирӣ дар Telegram",
+    "footerHint": "Савол доред? Ба мо нависед",
+    "tagline": "Хуҷанд аз худи Хуҷанд"
+  },
+  "parcel": {
+    "title": "Расондани бор",
+    "subtitle": "Аз нуқтаи А ба нуқтаи Б — зуд ва бехатар",
+    "fixedPriceBanner": "Нархи ягона {price} сом дар саросари Хуҷанд",
+    "som": "сом",
+    "senderFallback": "Фиристанда",
+    "fragile": "Бори шикананда",
+    "mapConfirm": "Тасдиқ кардан",
+    "pickup": {
+      "section": "Аз куҷо гирифтан",
+      "addressPlaceholder": "Суроғаи гирифтан",
+      "pinned": "Нуқта дар харита интихоб шуд",
+      "namePlaceholder": "Номи фиристанда (на ҳатмӣ)",
+      "phonePlaceholder": "Телефони фиристанда (на ҳатмӣ)",
+      "mapTitle": "Нуқтаи гирифтанро интихоб кунед",
+      "detailsPlaceholder": "Манзил, ошёна (на ҳатмӣ)"
+    },
+    "dropoff": {
+      "section": "Ба куҷо расондан",
+      "addressPlaceholder": "Суроғаи расондан",
+      "pinned": "Нуқта дар харита интихоб шуд",
+      "namePlaceholder": "Номи гиранда",
+      "phonePlaceholder": "Телефони гиранда",
+      "mapTitle": "Нуқтаи расонданро интихоб кунед",
+      "detailsPlaceholder": "Манзил, ошёна (на ҳатмӣ)"
+    },
+    "mapHint": {
+      "pickup": "Бор аз куҷо гирифта мешавад?",
+      "dropoff": "Бор ба куҷо расонида мешавад?"
+    },
+    "contents": {
+      "section": "Дар бораи бор",
+      "descPlaceholder": "Дар бор чӣ ҳаст? (на ҳатмӣ)"
+    },
+    "payment": {
+      "sectionWithPrice": "Пардохт ({price} сом)",
+      "section": "Пардохт",
+      "cash": "Нақд ба паёмбар",
+      "qr": "Пардохти QR",
+      "transfer": "Гузаронидан ба рақам",
+      "qrHint": "Алиф Моби, Корти Миллӣ",
+      "payerSender": "Фиристанда мепардозад",
+      "payerRecipient": "Гиранда мепардозад"
+    },
+    "submit": "Бор фиристодан",
+    "submitting": "Ирсол...",
+    "errors": {
+      "invalid_pickup_location": "Нуқтаи гирифтанро дар харита интихоб кунед",
+      "invalid_dropoff_location": "Нуқтаи расонданро дар харита интихоб кунед",
+      "invalid_dropoff_name": "Номи гирандаро нависед",
+      "invalid_dropoff_phone": "Телефони гиранда нодуруст",
+      "too_far": "Масофа аз ҳадди ҷоиз зиёд аст",
+      "generic": "Хато рӯй дод. Боз кӯшиш кунед."
+    },
+    "chooseOnMap": "Дар харита нишон додан",
+    "weight": {
+      "section": "Вазн",
+      "light": "То 5 кг",
+      "heavy": "5–15 кг"
+    },
+    "price": {
+      "pickAddresses": "Ҳарду суроғаро интихоб кунед"
+    }
+  },
+  "orders": {
+    "title": "Фармоишҳои ман",
+    "subtitle": "{count} фармоиш",
+    "emptyTitle": "Ҳоло фармоиш нест",
+    "emptyHint": "Аз бозор маҳсулот интихоб кунед ё посилка фиристед.",
+    "signedOutHint": "Барои дидани фармоишҳо аз тавассути телефонатон фармоиш диҳед.",
+    "foodOrder": "Мева ва чормағз",
+    "parcelOrder": "Расондани бор"
+  },
+  "profile": {
+    "guestName": "Меҳмон",
+    "guestHint": "Бе бақайдгирӣ фармоиш диҳед",
+    "language": "Забон",
+    "myOrders": "Фармоишҳои ман",
+    "becomeCourier": "Паёмбар шавед",
+    "becomeCourierHint": "Дар вақти холӣ кор кунед",
+    "becomePartner": "Шарик шавед",
+    "becomePartnerHint": "Дар Colibri фурӯшгоҳ кушоед",
+    "staffPortal": "Кабинети кормандон",
+    "staffPortalHint": "Фурӯшгоҳ · Оператор · Паёмбар"
+  },
+  "partner": {
+    "back": "Бозгашт",
+    "title": "Шарик шавед",
+    "subtitle": "Дар бораи тиҷорати худ маълумот диҳед — мо тамос мегирем дар 1-2 рӯз.",
+    "businessSection": "Тиҷорат",
+    "businessNamePlaceholder": "Номи фурӯшгоҳ ё ширкат",
+    "verticalSection": "Категория",
+    "categoryPlaceholder": "Шумо чӣ мефурӯшед? (масалан: меваи хушк, дору)",
+    "contactSection": "Тамос",
+    "contactNamePlaceholder": "Ному насби шумо",
+    "addressPlaceholder": "Суроға (агар фурӯшгоҳ доред)",
+    "aboutSection": "Дар бораи худатон",
+    "aboutPlaceholder": "Тиҷорати худро тавсиф кунед: чанд сол кор мекунед, чӣ махсус доред...",
+    "verticals": {
+      "fruits": "Мева ва чормағз",
+      "pharmacy": "Дорухона",
+      "agro": "Кишоварзӣ",
+      "other": "Дигар"
+    },
+    "submit": "Аризаро ирсол кунед",
+    "submitting": "Ирсол шуда истодааст...",
+    "success": {
+      "title": "Раҳмат барои ариза!",
+      "hint": "Мо аризаатонро қабул кардем. Дар 1-2 рӯзи корӣ бо шумо тамос мегирем."
+    },
+    "errors": {
+      "invalid_business_name": "Номи фурӯшгоҳро нависед",
+      "invalid_contact_name": "Ному насбро нависед",
+      "invalid_phone": "Шумораи телефон нодуруст",
+      "generic": "Хато рӯй дод. Боз кӯшиш кунед."
+    }
+  },
+  "verticals": {
+    "fruits": {
+      "title": "Мева ва меваи хушк",
+      "subtitle": "Аз боғҳои Хуҷанд, мустақиман",
+      "stat1": "{count} фурӯшгоҳ",
+      "stat2": "30 дақ"
+    },
+    "parcel": {
+      "title": "Расондани бор",
+      "subtitle": "Аз нуқта то нуқта, дар як соат",
+      "stat1": "аз 15 сом",
+      "stat2": "60 дақ"
+    },
+    "pharmacy": {
+      "title": "Дорухона",
+      "subtitle": "Доруҳо ба хона",
+      "month": "МАРТ"
+    },
+    "agro": {
+      "title": "Кишоварзӣ",
+      "subtitle": "Тухмиҳо, нуриҳо",
+      "month": "АПРЕЛ"
+    },
+    "garden": {
+      "title": "Боғдорӣ",
+      "subtitle": "Асбоб ва ниҳол",
+      "month": "МАЙ"
+    },
+    "farmers": {
+      "title": "Деҳқонон",
+      "subtitle": "Мустақим аз боғ",
+      "month": "ИЮН"
+    }
+  },
+  "marketplace": {
+    "title": "Меваҳо ва чормағз",
+    "subtitle": "Тоза, маҳаллӣ, дар 30 дақиқа",
+    "stores": "Фурӯшгоҳҳо",
+    "products": "Маҳсулотҳо",
+    "openUntil": "То {time}",
+    "closed": "Баста аст",
+    "perKg": "за кг",
+    "perPiece": "за дона",
+    "perPack": "за бастабандӣ",
+    "addToCart": "Илова кардан",
+    "added": "Илова шуд",
+    "outOfStock": "Тамом шуд",
+    "category": {
+      "fresh": "Меваҳои тоза",
+      "dried": "Чормағз ва меваҳои хушк",
+      "berries": "Буттамеваҳо",
+      "citrus": "Цитрусӣ"
+    },
+    "newStore": "Нав",
+    "minutesSuffix": "дақ"
+  },
+  "cart": {
+    "title": "Сабади шумо",
+    "empty": "Сабад холӣ аст",
+    "emptyHint": "Меваҳои тозаи Хуҷандро интихоб кунед",
+    "browse": "Ба бозор",
+    "items": "{count, plural, =0 {ягон маҳсулот} =1 {1 маҳсулот} other {# маҳсулот}}",
+    "subtotal": "Маблағ",
+    "delivery": "Расондан",
+    "deliveryFree": "Бепул",
+    "deliveryEstimate": "тахминӣ",
+    "total": "Ҷамъ",
+    "freeDeliveryProgress": "{amount} сом боз — расондан бепул",
+    "freeDeliveryReached": "🎉 Расондани шумо бепул аст",
+    "checkout": "Ба пардохт",
+    "remove": "Хориҷ кардан",
+    "clear": "Тоза кардан"
+  },
+  "product": {
+    "addedToCart": "Ба сабад илова шуд",
+    "inCart": "Дар сабад",
+    "weighedAtDelivery": "Бо тарозу ҳангоми супоридан баркашида мешавад",
+    "freshFrom": "Тоза аз",
+    "description": "Тавсиф"
+  },
+  "currency": {
+    "som": "сом"
+  },
+  "checkout": {
+    "title": "Пардохт",
+    "contactSection": "Тамос",
+    "addressSection": "Суроға",
+    "paymentSection": "Тарзи пардохт",
+    "notesSection": "Эзоҳ барои паёмбар",
+    "phone": "Рақами телефон",
+    "phonePlaceholder": "+992 92 123 45 67",
+    "phoneInvalid": "Рақами нодуруст",
+    "name": "Ном",
+    "namePlaceholder": "Номатонро нависед",
+    "nameInvalid": "Ном бояд ҳадди ақал 2 ҳарф бошад",
+    "useMyLocation": "Ҷойи маро истифода баред",
+    "locationDenied": "Иҷозат дода нашуд — нуқта дар харита",
+    "locating": "Дар ҳоли ҷустуҷӯ...",
+    "addressOnMap": "Нуқтаро дар харита бимонед",
+    "addressHint": "Нишона, ҳавлӣ, ошёна",
+    "addressHintPlaceholder": "масалан, наздики масҷиди сабз",
+    "addressDetails": "Манзил (хона, ошёна, домофон)",
+    "addressDetailsPlaceholder": "Масалан: хона 12, ошёнаи 3",
+    "paymentCash": "Нақд",
+    "paymentCashHint": "Ҳангоми супоридан",
+    "paymentQr": "Бо QR",
+    "paymentQrHint": "Аз корти банкӣ",
+    "paymentBank": "Интиқол",
+    "paymentBankHint": "Бо ҳисоби бонкӣ",
+    "notesPlaceholder": "Нишона ё дастурот барои паёмбар",
+    "summarySection": "Хулоса",
+    "placing": "Дар ҳоли қабул...",
+    "placeOrder": "Фармоиш диҳед",
+    "welcomeBack": "Хуш омадед, {name}",
+    "savedAddresses": "Суроғаҳои қаблӣ",
+    "useThisAddress": "Истифода кардан",
+    "errors": {
+      "invalid_phone": "Рақами нодуруст",
+      "invalid_name": "Номро санҷед",
+      "invalid_address": "Суроғаро мушаххас кунед",
+      "missing_address_text": "Нишонаро нависед",
+      "empty_cart": "Сабад холӣ аст",
+      "store_unavailable": "Фурӯшгоҳ ҳозир дастрас нест",
+      "insufficient_stock": "Маҳсулот тамом шуд",
+      "product_unavailable": "Маҳсулот дастрас нест",
+      "generic": "Хатогӣ рӯй дод. Боз кӯшиш кунед"
+    },
+    "addressPlaceholder": "Кӯча, хона...",
+    "chooseOnMap": "Дар харита",
+    "mapTitle": "Суроғаро дар харита интихоб кунед",
+    "mapConfirm": "Тасдиқ",
+    "subtotal": "Маблағ",
+    "delivery": "Расондан",
+    "total": "Ҷамъ"
+  },
+  "track": {
+    "title": "Фармоиши шумо",
+    "code": "Рамзи фармоиш",
+    "notFound": "Фармоиш ёфт нашуд",
+    "callStore": "Занг ба фурӯшгоҳ",
+    "estimatedArrival": "Тахминан расидан",
+    "minutes": "дақ",
+    "items": "Маҳсулот",
+    "deliveryAddress": "Суроғаи расондан",
+    "paymentMethod": "Пардохт",
+    "needToPay": "Лозим: пардохт",
+    "qrPlaceholder": "Барои пардохт ин QR-ро сканер кунед",
+    "iHavePaid": "Ман пардохт кардам",
+    "bankDetails": "Маълумоти банкӣ",
+    "bankAccount": "Ҳисоб: 22402 9720 4001 1234",
+    "bankName": "Алиф Бонк",
+    "bankReference": "Дар тавзеҳ: {code}",
+    "status": {
+      "pending_payment": "Дар ҳоли пардохт",
+      "placed": "Қабул шуд",
+      "accepted": "Тасдиқ шуд",
+      "preparing": "Дар ҳоли омодагӣ",
+      "ready": "Тайёр аст",
+      "courier_assigned": "Паёмбар таъин шуд",
+      "picked_up": "Дар роҳ",
+      "delivered": "Супорида шуд",
+      "cancelled": "Бекор шуд"
+    },
+    "paymentChecking": "Пардохт тафтиш шуда истодааст",
+    "paymentCheckingHint": "Мо пардохти шуморо тасдиқ мекунем",
+    "paymentError": "Хато. Боз кӯшиш кунед.",
+    "qrNotConfigured": "QR ҳоло насб нашудааст",
+    "bankNotConfigured": "Реквизитҳо ҳоло нестанд",
+    "referencePlaceholder": "Рақами амалиёт (ихтиёрӣ)",
+    "subtotal": "Маблағ",
+    "delivery": "Расондан",
+    "total": "Ҷамъ",
+    "courierOnMap": "Паёмбар"
+  },
+  "common": {
+    "back": "Бозгашт",
+    "loading": "Боргирӣ...",
+    "retry": "Боз кӯшиш кунед",
+    "error": "Хатогӣ рӯй дод",
+    "soon": "Ба зудӣ"
+  },
+  "prices": {
+    "eyebrow": "Нархномаи ҳаррӯза",
+    "title": "Нархҳои Хуҷанд имрӯз",
+    "subtitle": "Нархи ҳақиқӣ — аз боғ то бозор. Шаффоф, ҳаррӯза навшаванда.",
+    "updated": "Навшуд",
+    "farmGate": "Аз боғ",
+    "bazaar": "Бозор",
+    "som": "сом",
+    "empty": "Нархҳо ҳоло дастрас нестанд",
+    "category": {
+      "fruit": "Меваҳо",
+      "dried": "Меваи хушк",
+      "nut": "Чормағз",
+      "vegetable": "Сабзавот"
+    },
+    "spreadTitle": "Чаро ин муҳим аст?",
+    "spreadBody": "Фарқи байни нархи боғ ва бозор — ин он чизест, ки миёнаравҳо мегиранд. Colibri ин фарқро кам мекунад: боғдор бештар мегирад, шумо камтар мепардозед.",
+    "disclaimer": "Нархҳо тахминӣ буда, аз рӯи маълумоти бозори Хуҷанд ҷамъ оварда мешаванд. Метавонанд тағйир ёбанд.",
+    "indexTitle": "Индекси бозор",
+    "indexHint": "Нархи миёнаи бозор",
+    "range7": "7 рӯз",
+    "range30": "30 рӯз",
+    "noHistory": "Барои график маълумот кофӣ нест"
+  },
+  "courierApply": {
+    "back": "Бозгашт",
+    "eyebrow": "Ба даста ҳамроҳ шавед",
+    "title": "Паёмбари Colibri шавед",
+    "subtitle": "Дар вақти холӣ кор кунед, ҳар рӯз пул кор кунед. Ҳоло ариза диҳед.",
+    "conditionsTitle": "Шартҳо ва имкониятҳо",
+    "conditions": {
+      "earnings": {
+        "title": "Даромади хуб",
+        "hint": "Барои ҳар расондан подош"
+      },
+      "flexible": {
+        "title": "Вақти озод",
+        "hint": "Худатон вақтро интихоб мекунед"
+      },
+      "phone": {
+        "title": "Танҳо телефон",
+        "hint": "Барномаи Colibri кофист"
+      },
+      "vehicle": {
+        "title": "Мото ё велосипед",
+        "hint": "Бо нақлиёти худатон"
+      },
+      "fast": {
+        "title": "Фармоиши зуд",
+        "hint": "Наздиктарин фармоишро мегиред"
+      },
+      "fair": {
+        "title": "Муносибати одилона",
+        "hint": "Шаффоф, бе фиреб"
+      }
+    },
+    "requirementsNote": "Талаботҳо: синну сол аз 18 боло, телефони ҳушманд, нақлиёт (мото/велосипед/мошин) ё омодагӣ бо пиёда дар марказ. Баъди тасдиқ ба шумо логин ва парол медиҳем.",
+    "readyButton": "Тайёрам — ариза медиҳам",
+    "backToConditions": "Ба шартҳо",
+    "form": {
+      "name": "Ному насб",
+      "namePlaceholder": "Исм ва насаб",
+      "phone": "Телефон",
+      "vehicle": "Нақлиёт",
+      "vehicles": {
+        "moto": "Мото",
+        "bike": "Велос",
+        "car": "Мошин",
+        "foot": "Пиёда"
+      },
+      "district": "Ноҳия",
+      "districtPlaceholder": "Дар кадом ноҳия кор мекунед?",
+      "about": "Дар бораи худатон",
+      "aboutPlaceholder": "Таҷриба, вақти кор, чаро мехоҳед...",
+      "submit": "Аризаро ирсол кунед"
+    },
+    "done": {
+      "title": "Аризаатон қабул шуд!",
+      "hint": "Мо дар 1-2 рӯз бо шумо тамос мегирем ва логину парол медиҳем."
+    },
+    "errors": {
+      "invalid_name": "Ному насбро нависед",
+      "invalid_phone": "Шумораи телефон нодуруст",
+      "terms_not_accepted": "Шартҳоро қабул кунед",
+      "generic": "Хато рӯй дод. Боз кӯшиш кунед."
+    }
+  },
+  "reviews": {
+    "title": "Шарҳҳо",
+    "writeButton": "Шарҳ нависед",
+    "empty": "Ҳоло шарҳ нест. Аввалин шавед!",
+    "count": "{count} шарҳ",
+    "anon": "Мизоҷ",
+    "modalTitle": "Фурӯшгоҳро баҳо диҳед",
+    "modalHint": "Таҷрибаатонро бо дигарон мубодила кунед",
+    "pickRating": "Лутфан баҳо гузоред",
+    "commentPlaceholder": "Шарҳи шумо (ихтиёрӣ)",
+    "cancel": "Бекор",
+    "submit": "Фиристодан",
+    "errors": {
+      "not_signed_in": "Аввал ворид шавед",
+      "no_delivered_order": "Танҳо пас аз фармоиши расонидашуда",
+      "already_reviewed": "Шумо аллакай шарҳ додаед",
+      "invalid_rating": "Баҳои нодуруст",
+      "generic": "Хато рӯй дод."
+    }
+  }
+}
