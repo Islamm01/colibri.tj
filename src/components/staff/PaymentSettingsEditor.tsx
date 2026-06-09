@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { ImageCropUploader } from '@/components/images/ImageCropUploader';
 
 interface Settings {
   qr_enabled: boolean;
@@ -25,6 +26,7 @@ export function PaymentSettingsEditor() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [qrUpload, setQrUpload] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -88,17 +90,35 @@ export function PaymentSettingsEditor() {
                   </div>
                 )}
                 <div className="flex-1">
-                  <Field
-                    label="Ссылка на изображение QR"
-                    value={s.qr_image_url}
-                    onChange={(v) => set('qr_image_url', v)}
-                    placeholder="https://..."
-                  />
-                  <p className="text-[10px] text-ink-faint mt-1 px-0.5">
-                    Загрузите QR в хранилище и вставьте ссылку, либо используйте только реквизиты ниже.
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setQrUpload(true)}
+                      className="px-3 py-2 rounded-lg btn-fig text-white text-[12.5px] font-medium"
+                    >
+                      {s.qr_image_url ? 'Заменить QR' : 'Загрузить QR'}
+                    </button>
+                    {s.qr_image_url && (
+                      <button
+                        type="button"
+                        onClick={() => set('qr_image_url', '')}
+                        className="px-3 py-2 rounded-lg border border-black/[0.1] text-ink-muted text-[12.5px] font-medium hover:bg-black/[0.03]"
+                      >
+                        Убрать
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-[10px] text-ink-faint mt-1.5 px-0.5">
+                    Загрузите файл QR прямо с устройства — ссылка не нужна.
                   </p>
                 </div>
               </div>
+              <Field
+                label="Ссылка на изображение QR (необязательно)"
+                value={s.qr_image_url}
+                onChange={(v) => set('qr_image_url', v)}
+                placeholder="https://..."
+              />
               <Field label="Подпись под QR" value={s.qr_label} onChange={(v) => set('qr_label', v)} placeholder="Отсканируйте QR в приложении банка" />
             </div>
           )}
@@ -125,6 +145,16 @@ export function PaymentSettingsEditor() {
       >
         {saving ? 'Сохранение...' : saved ? '✓ Сохранено' : 'Сохранить'}
       </button>
+
+      <ImageCropUploader
+        open={qrUpload}
+        kind="payment-qr"
+        onClose={() => setQrUpload(false)}
+        onUploaded={(url) => {
+          set('qr_image_url', url);
+          setQrUpload(false);
+        }}
+      />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import Cropper from 'react-easy-crop';
 import type { Area } from 'react-easy-crop';
 import { processCroppedImage, ASPECT, PRESETS, type TargetSize } from '@/lib/images/process';
 
-type UploadKind = 'product' | 'store-logo' | 'store-cover' | 'price';
+type UploadKind = 'product' | 'store-logo' | 'store-cover' | 'price' | 'payment-qr';
 
 interface Props {
   open: boolean;
@@ -22,6 +22,7 @@ interface Props {
 function aspectFor(kind: UploadKind): number {
   if (kind === 'product') return ASPECT.product;
   if (kind === 'price') return ASPECT.price;
+  if (kind === 'payment-qr') return ASPECT.paymentQr;
   if (kind === 'store-logo') return ASPECT.storeLogo;
   return ASPECT.storeCover;
 }
@@ -29,6 +30,7 @@ function aspectFor(kind: UploadKind): number {
 function targetsFor(kind: UploadKind): TargetSize[] {
   if (kind === 'product') return PRESETS.product;
   if (kind === 'price') return PRESETS.price;
+  if (kind === 'payment-qr') return PRESETS.paymentQr;
   if (kind === 'store-logo') return PRESETS.storeLogo;
   return PRESETS.storeCover;
 }
@@ -36,6 +38,7 @@ function targetsFor(kind: UploadKind): TargetSize[] {
 function labelFor(kind: UploadKind): string {
   if (kind === 'product') return 'Фото товара';
   if (kind === 'price') return 'Фото продукта';
+  if (kind === 'payment-qr') return 'QR для оплаты';
   if (kind === 'store-logo') return 'Логотип магазина';
   return 'Обложка магазина';
 }

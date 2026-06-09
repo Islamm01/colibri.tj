@@ -37,18 +37,22 @@ export async function POST(request: Request) {
   const productId = form.get('productId') ? String(form.get('productId')) : null;
   const itemKey = form.get('itemKey') ? String(form.get('itemKey')) : null;
 
-  if (!['product', 'store-logo', 'store-cover', 'price'].includes(kind)) {
+  if (!['product', 'store-logo', 'store-cover', 'price', 'payment-qr'].includes(kind)) {
     return NextResponse.json({ error: 'invalid_kind' }, { status: 400 });
   }
 
   // Authorize per kind: store assets/products require the owning store_owner;
-  // price-index photos require admin/operator.
+  // price-index photos require admin/operator; payment QR is admin-only.
   if (kind === 'price') {
     if (session.role !== 'admin' && session.role !== 'operator') {
       return NextResponse.json({ error: 'forbidden' }, { status: 403 });
     }
     if (!itemKey) {
       return NextResponse.json({ error: 'missing_item_key' }, { status: 400 });
+    }
+  } else if (kind === 'payment-qr') {
+    if (session.role !== 'admin') {
+      return NextResponse.json({ error: 'forbidden' }, { status: 403 });
     }
   } else if (session.role !== 'store_owner' || !session.storeId) {
     return NextResponse.json({ error: 'forbidden' }, { status: 403 });
@@ -101,6 +105,9 @@ export async function POST(request: Request) {
       bucket = PRODUCT_BUCKET;
       const safeKey = itemKey!.replace(/[^a-z0-9_-]+/gi, '_').slice(0, 60);
       path = `price-index/${safeKey}/${timestamp}-${entry.variant}.webp`;
+    } else if (kind === 'payment-qr') {
+      bucket = STORE_BUCKET;
+      path = `payment/qr-${timestamp}-${entry.variant}.webp`;
     } else if (kind === 'product') {
       bucket = PRODUCT_BUCKET;
       path = `products/${session.storeId}/${productId}/${timestamp}-${entry.variant}.webp`;

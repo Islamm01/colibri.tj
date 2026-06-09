@@ -123,6 +123,10 @@ export const PRESETS = {
   price: [
     { variant: 'full', width: 240, aspect: 1, quality: 0.85 },
   ] as TargetSize[],
+  // Payment QR must stay crisp/scannable — square, larger, high quality.
+  paymentQr: [
+    { variant: 'full', width: 600, aspect: 1, quality: 0.92 },
+  ] as TargetSize[],
   storeLogo: [
     { variant: 'full', width: 400, aspect: 1, quality: 0.88 },
   ] as TargetSize[],
@@ -135,6 +139,7 @@ export const PRESETS = {
 export const ASPECT = {
   product: 1,
   price: 1,
+  paymentQr: 1,
   storeLogo: 1,
   storeCover: 16 / 9,
 };
