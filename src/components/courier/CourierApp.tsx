@@ -286,28 +286,45 @@ export function CourierApp({ courierUserId }: { courierUserId: string }) {
 
   if (loading || !state) {
     return (
-      <div className="min-h-dvh flex items-center justify-center">
+      <div className="min-h-dvh flex items-center justify-center bg-gradient-to-b from-[#F6F4EE] to-[#E8E2D6]">
         <span className="inline-block w-6 h-6 border-2 border-fig-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-dvh flex flex-col bg-cream">
+    <div className="min-h-dvh bg-gradient-to-b from-[#F6F4EE] via-[#F1EDE4] to-[#E8E2D6]">
+      <div className="min-h-dvh flex flex-col max-w-md mx-auto w-full">
       {/* Top bar — always visible */}
-      <header className="flex items-center justify-between px-5 h-14 bg-white border-b border-black/[0.06]">
-        <div className="font-serif text-fig-600 text-[18px] tracking-[0.08em]">Colibri</div>
-        <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-20 flex items-center justify-between px-5 h-16 bg-white/80 backdrop-blur-md border-b border-black/[0.05] shadow-soft">
+        <div className="flex items-center gap-2">
+          <span className="w-7 h-7 rounded-xl bg-fig-600 flex items-center justify-center shadow-fig-glow">
+            <span className="w-2 h-2 rounded-full bg-gold-300" />
+          </span>
+          <span className="font-serif text-fig-700 text-[19px] tracking-[0.06em]">Colibri</span>
+        </div>
+        <div className="flex items-center gap-2.5">
           <StatusBadge status={state.courier.status} />
-          <button onClick={logout} className="text-[12px] text-ink-muted hover:text-red-600">
-            Выход
+          <button
+            onClick={logout}
+            aria-label="Выход"
+            className="w-9 h-9 flex items-center justify-center rounded-full text-ink-muted hover:text-red-600 hover:bg-red-50 transition-colors"
+          >
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <path d="m16 17 5-5-5-5M21 12H9" />
+            </svg>
           </button>
         </div>
       </header>
 
       {error && (
-        <div className="mx-5 mt-3 px-3 py-2 bg-red-50 border border-red-100 rounded-lg text-[12px] text-red-700">
-          {error}
+        <div className="mx-5 mt-3 flex items-start gap-2 px-3.5 py-2.5 bg-red-50 border border-red-100 rounded-xl text-[12px] text-red-700 shadow-soft animate-fade-in">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 8v4M12 16h.01" />
+          </svg>
+          <span>{error}</span>
         </div>
       )}
 
@@ -335,8 +352,11 @@ export function CourierApp({ courierUserId }: { courierUserId: string }) {
 
       {/* Delivery history — persists after each completed order */}
       {!state.activeOrder && !state.offer && state.history.length > 0 && (
-        <CourierHistory history={state.history} />
+        <div className="px-5 pb-8">
+          <CourierHistory history={state.history} />
+        </div>
       )}
+      </div>
     </div>
   );
 }
@@ -367,18 +387,22 @@ function CourierHistory({ history }: { history: HistoryOrder[] }) {
             ? new Date(h.delivered_at).toLocaleDateString('ru', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
             : '';
           return (
-            <div key={h.id} className="bg-white rounded-xl border border-black/[0.05] px-4 py-3 flex items-center justify-between">
-              <div className="min-w-0">
+            <div key={h.id} className="bg-white rounded-2xl border border-black/[0.04] shadow-soft px-4 py-3 flex items-center gap-3">
+              <span className="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center shrink-0">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+              </span>
+              <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-[10px] text-ink-faint">{h.public_code}</span>
-                  <span className="text-[10px] text-green-700">✓ Доставлен</span>
+                  {when && <span className="text-[10px] text-ink-muted">· {when}</span>}
                 </div>
-                <div className="text-[13px] text-ink-soft truncate mt-0.5">
+                <div className="text-[13px] font-medium text-ink-soft truncate mt-0.5">
                   {h.vertical === 'parcel' ? 'Посылка' : h.customer_name}
                 </div>
-                {when && <div className="text-[10px] text-ink-muted mt-0.5">{when}</div>}
               </div>
-              <div className="text-[14px] font-medium text-fig-800 tabular-nums shrink-0">
+              <div className="text-[14px] font-semibold text-fig-800 tabular-nums shrink-0">
                 {h.total} <span className="text-[10px] text-ink-muted font-normal">сом</span>
               </div>
             </div>
@@ -395,12 +419,18 @@ function CourierHistory({ history }: { history: HistoryOrder[] }) {
 
 function StatusBadge({ status }: { status: 'offline' | 'online' | 'on_delivery' }) {
   const config = {
-    offline: { label: 'Не на смене', color: 'bg-ink-faint/20 text-ink-muted' },
-    online: { label: 'На смене', color: 'bg-green-100 text-green-800' },
-    on_delivery: { label: 'В пути', color: 'bg-fig-50 text-fig-700' },
+    offline: { label: 'Не на смене', pill: 'bg-ink-faint/15 text-ink-muted', dot: 'bg-ink-faint', live: false },
+    online: { label: 'На смене', pill: 'bg-green-100 text-green-800', dot: 'bg-green-500', live: true },
+    on_delivery: { label: 'В пути', pill: 'bg-fig-50 text-fig-700', dot: 'bg-fig-600', live: true },
   }[status];
   return (
-    <span className={`text-[11px] font-medium px-2 py-1 rounded-md tracking-wide ${config.color}`}>
+    <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full tracking-wide ${config.pill}`}>
+      <span className="relative flex w-1.5 h-1.5">
+        {config.live && (
+          <span className={`absolute inline-flex w-full h-full rounded-full opacity-60 animate-ping ${config.dot}`} />
+        )}
+        <span className={`relative inline-flex w-1.5 h-1.5 rounded-full ${config.dot}`} />
+      </span>
       {config.label}
     </span>
   );
@@ -408,26 +438,31 @@ function StatusBadge({ status }: { status: 'offline' | 'online' | 'on_delivery' 
 
 function OfflineView({ onGoOnline, actionInFlight }: { onGoOnline: () => void; actionInFlight: boolean }) {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
-      <div className="w-24 h-24 rounded-full bg-fig-50 flex items-center justify-center text-fig-600 mb-5">
-        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <div className="flex-1 flex flex-col items-center justify-center px-8 text-center animate-fade-up">
+      <div className="w-28 h-28 rounded-full bg-gradient-to-b from-fig-50 to-white flex items-center justify-center text-fig-600 mb-6 shadow-card ring-1 ring-fig-600/10">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 7c0 5-7 13-7 13S5 12 5 7a7 7 0 0 1 14 0Z" />
           <circle cx="12" cy="7" r="2.5" />
         </svg>
       </div>
-      <h1 className="font-serif text-[24px] text-ink-soft mb-2">Готовы выйти на смену?</h1>
-      <p className="text-[13px] text-ink-muted leading-relaxed max-w-[280px] mb-8">
+      <h1 className="font-serif text-[25px] text-ink-soft mb-2">Готовы выйти на смену?</h1>
+      <p className="text-[13px] text-ink-muted leading-relaxed max-w-[280px] mb-9">
         Мы определим ваше местоположение и начнём предлагать вам заказы поблизости
       </p>
       <button
         onClick={onGoOnline}
         disabled={actionInFlight}
-        className="w-full max-w-[280px] btn-fig text-white py-4 rounded-2xl font-medium text-[16px] disabled:opacity-70 flex items-center justify-center gap-2"
+        className="w-full max-w-[300px] btn-fig text-white py-4 rounded-2xl font-semibold text-[16px] disabled:opacity-70 flex items-center justify-center gap-2"
       >
         {actionInFlight ? (
           <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
         ) : (
-          'Выйти на смену'
+          <>
+            Выйти на смену
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </>
         )}
       </button>
     </div>
@@ -436,22 +471,23 @@ function OfflineView({ onGoOnline, actionInFlight }: { onGoOnline: () => void; a
 
 function IdleView({ onGoOffline, actionInFlight }: { onGoOffline: () => void; actionInFlight: boolean }) {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
-      <div className="w-24 h-24 rounded-full bg-green-50 flex items-center justify-center text-green-700 mb-5 relative">
-        <div className="absolute inset-0 rounded-full bg-green-100 animate-ping opacity-40" />
-        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="relative">
+    <div className="flex-1 flex flex-col items-center justify-center px-8 text-center animate-fade-up">
+      <div className="w-28 h-28 rounded-full bg-gradient-to-b from-green-50 to-white flex items-center justify-center text-green-700 mb-6 relative shadow-card ring-1 ring-green-600/10">
+        <span className="absolute inset-0 rounded-full bg-green-400/20 animate-ping" />
+        <span className="absolute inset-3 rounded-full bg-green-400/10 animate-ping" style={{ animationDelay: '0.4s' }} />
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="relative">
           <circle cx="12" cy="12" r="9" />
           <path d="M12 7v5l3 2" />
         </svg>
       </div>
-      <h1 className="font-serif text-[22px] text-ink-soft mb-2">Ожидаем заказ</h1>
-      <p className="text-[13px] text-ink-muted leading-relaxed max-w-[280px] mb-12">
+      <h1 className="font-serif text-[23px] text-ink-soft mb-2">Ожидаем заказ</h1>
+      <p className="text-[13px] text-ink-muted leading-relaxed max-w-[280px] mb-10">
         Не закрывайте страницу. Когда поступит заказ — вы услышите сигнал и сможете принять его
       </p>
       <button
         onClick={onGoOffline}
         disabled={actionInFlight}
-        className="text-[13px] text-ink-muted hover:text-red-600 disabled:opacity-50 underline-offset-4 hover:underline"
+        className="px-5 py-2.5 rounded-full bg-white border border-black/[0.08] text-[13px] font-medium text-ink-muted hover:text-red-600 hover:border-red-200 shadow-soft transition-colors disabled:opacity-50"
       >
         Завершить смену
       </button>
@@ -493,28 +529,43 @@ function OfferView({
   const itemCount = order.items.length;
   const pct = Math.max(0, Math.min(100, (secondsLeft / 15) * 100));
 
+  const ring = 2 * Math.PI * 22;
+
   return (
     <div className="flex-1 flex flex-col">
-      {/* Pulsing header */}
-      <div className="bg-fig-600 text-white px-5 py-3.5 flex items-center justify-between">
-        <div>
-          <div className="text-[10px] uppercase tracking-[1.4px] opacity-80">Новый заказ</div>
-          <div className="font-mono text-[13px]">{order.public_code}</div>
+      {/* Pulsing header with circular countdown */}
+      <div className="relative bg-gradient-to-br from-fig-600 via-fig-700 to-fig-800 text-white px-5 pt-4 pb-5 overflow-hidden">
+        <div className="absolute -top-10 -right-8 w-40 h-40 rounded-full bg-white/5" />
+        <div className="relative flex items-center justify-between">
+          <div>
+            <div className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[1.4px] bg-white/15 px-2 py-1 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold-300 animate-pulse" />
+              Новый заказ
+            </div>
+            <div className="font-mono text-[13px] mt-2 opacity-90">{order.public_code}</div>
+            <div className="font-serif text-[28px] tabular-nums leading-tight mt-1">
+              {Number(order.total).toFixed(0)} <span className="text-[15px] opacity-80">сом</span>
+            </div>
+          </div>
+          <div className="relative w-[56px] h-[56px] shrink-0">
+            <svg className="w-full h-full -rotate-90" viewBox="0 0 50 50">
+              <circle cx="25" cy="25" r="22" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="4" />
+              <circle
+                cx="25" cy="25" r="22" fill="none" stroke="#C8F169" strokeWidth="4" strokeLinecap="round"
+                strokeDasharray={ring}
+                strokeDashoffset={ring * (1 - pct / 100)}
+                style={{ transition: 'stroke-dashoffset 250ms linear' }}
+              />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center font-serif text-[20px] tabular-nums">
+              {secondsLeft}
+            </div>
+          </div>
         </div>
-        <div className="text-right">
-          <div className="font-serif text-[26px] tabular-nums leading-none">{secondsLeft}</div>
-          <div className="text-[10px] opacity-80">секунд</div>
-        </div>
-      </div>
-      <div className="h-1 bg-fig-700">
-        <div
-          className="h-full bg-white transition-all"
-          style={{ width: `${pct}%`, transitionDuration: '250ms' }}
-        />
       </div>
 
       {/* Order details */}
-      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
         {order.vertical === 'parcel' ? (
           <ParcelOfferCards order={order} distanceKm={offer.distanceKm} />
         ) : (
@@ -576,18 +627,18 @@ function OfferView({
       </div>
 
       {/* Action bar */}
-      <div className="px-5 py-4 border-t border-black/[0.06] safe-bottom bg-white grid grid-cols-3 gap-2">
+      <div className="px-5 py-4 border-t border-black/[0.05] safe-bottom bg-white/90 backdrop-blur-md grid grid-cols-3 gap-2.5">
         <button
           onClick={onReject}
           disabled={actionInFlight}
-          className="col-span-1 py-3.5 rounded-xl border border-ink-faint/30 text-ink-muted font-medium text-[14px] disabled:opacity-50"
+          className="col-span-1 py-3.5 rounded-2xl bg-cream border border-black/[0.08] text-ink-muted font-medium text-[14px] hover:bg-black/[0.03] transition-colors disabled:opacity-50"
         >
           Пропустить
         </button>
         <button
           onClick={onAccept}
           disabled={actionInFlight}
-          className="col-span-2 py-3.5 rounded-xl btn-fig text-white font-medium text-[15px] disabled:opacity-70 flex items-center justify-center gap-2"
+          className="col-span-2 py-3.5 rounded-2xl btn-fig text-white font-semibold text-[15px] disabled:opacity-70 flex items-center justify-center gap-2"
         >
           {actionInFlight ? (
             <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -653,11 +704,14 @@ function DeliveryView({
 
   return (
     <div className="flex-1 flex flex-col">
-      <div className="bg-white px-5 py-3 border-b border-black/[0.06]">
-        <div className="font-mono text-[11px] text-ink-subtle">
-          {order.public_code} {isParcel && <span className="text-fig-700">· Посылка</span>}
+      <div className="bg-white/90 backdrop-blur-md px-5 py-3.5 border-b border-black/[0.05] shadow-soft">
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[11px] text-ink-subtle">{order.public_code}</span>
+          {isParcel && (
+            <span className="text-[10px] font-semibold text-fig-700 bg-fig-50 px-2 py-0.5 rounded-full">Посылка</span>
+          )}
         </div>
-        <div className="text-[16px] font-medium text-ink-soft">
+        <div className="text-[17px] font-semibold text-ink-soft mt-0.5">
           {stage === 'pickup'
             ? isParcel
               ? 'Заберите у отправителя'
@@ -668,7 +722,7 @@ function DeliveryView({
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
         {/* Stage indicator */}
         <div className="flex items-center gap-2">
           <StageStep
@@ -704,9 +758,9 @@ function DeliveryView({
                 href={`https://www.google.com/maps/dir/?api=1&destination=${pickup.lat},${pickup.lng}`}
                 target="_blank"
                 rel="noopener"
-                className="inline-flex items-center gap-1.5 mt-3 text-[12px] text-fig-700 font-medium"
+                className="inline-flex items-center gap-1.5 mt-3 px-3 py-2 rounded-xl bg-fig-50 text-fig-700 text-[12px] font-semibold hover:bg-fig-600 hover:text-white transition-colors"
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polygon points="3 11 22 2 13 21 11 13 3 11" />
                 </svg>
                 Открыть в картах
@@ -733,9 +787,9 @@ function DeliveryView({
                 href={`https://www.google.com/maps/dir/?api=1&destination=${dropoff.lat},${dropoff.lng}`}
                 target="_blank"
                 rel="noopener"
-                className="inline-flex items-center gap-1.5 mt-3 text-[12px] text-fig-700 font-medium"
+                className="inline-flex items-center gap-1.5 mt-3 px-3 py-2 rounded-xl bg-fig-50 text-fig-700 text-[12px] font-semibold hover:bg-fig-600 hover:text-white transition-colors"
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polygon points="3 11 22 2 13 21 11 13 3 11" />
                 </svg>
                 Открыть в картах
@@ -794,22 +848,41 @@ function DeliveryView({
         )}
       </div>
 
-      <div className="px-5 py-4 border-t border-black/[0.06] safe-bottom bg-white">
+      <div className="px-5 py-4 border-t border-black/[0.05] safe-bottom bg-white/90 backdrop-blur-md">
         {stage === 'pickup' ? (
           <button
             onClick={onPickedUp}
             disabled={actionInFlight}
-            className="w-full py-4 rounded-2xl btn-fig text-white font-medium text-[16px] disabled:opacity-70"
+            className="w-full py-4 rounded-2xl btn-fig text-white font-semibold text-[16px] disabled:opacity-70 flex items-center justify-center gap-2"
           >
-            Я забрал заказ
+            {actionInFlight ? (
+              <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 7h14l-1 13a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 7Z" />
+                  <path d="M9 7V5a3 3 0 0 1 6 0v2" />
+                </svg>
+                Я забрал заказ
+              </>
+            )}
           </button>
         ) : (
           <button
             onClick={onDelivered}
             disabled={actionInFlight}
-            className="w-full py-4 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-medium text-[16px] disabled:opacity-70 transition-colors"
+            className="w-full py-4 rounded-2xl bg-gradient-to-b from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold text-[16px] disabled:opacity-70 transition-colors shadow-lg shadow-green-600/25 flex items-center justify-center gap-2"
           >
-            Заказ доставлен
+            {actionInFlight ? (
+              <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <>
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                Заказ доставлен
+              </>
+            )}
           </button>
         )}
       </div>
@@ -820,10 +893,10 @@ function DeliveryView({
 function Card({ children, highlight }: { children: React.ReactNode; highlight?: boolean }) {
   return (
     <div
-      className={`p-4 rounded-2xl border ${
+      className={`p-4 rounded-2xl ${
         highlight
-          ? 'bg-white border-fig-600/30 shadow-card'
-          : 'bg-white border-black/[0.06]'
+          ? 'bg-white ring-1 ring-fig-600/20 shadow-card border-l-[3px] border-l-fig-600'
+          : 'bg-white border border-black/[0.05] shadow-soft'
       }`}
     >
       {children}
@@ -833,7 +906,8 @@ function Card({ children, highlight }: { children: React.ReactNode; highlight?: 
 
 function CardLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="text-[10px] font-medium text-ink-subtle tracking-[1.4px] uppercase mb-1.5">
+    <div className="flex items-center gap-1.5 text-[10px] font-semibold text-ink-subtle tracking-[1.4px] uppercase mb-1.5">
+      <span className="w-1 h-1 rounded-full bg-gold-400" />
       {children}
     </div>
   );
@@ -843,19 +917,19 @@ function StageStep({ label, active, done }: { label: string; active: boolean; do
   return (
     <div className="flex items-center gap-1.5">
       <div
-        className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-medium ${
+        className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-semibold transition-colors ${
           done
-            ? 'bg-green-600 text-white'
+            ? 'bg-green-600 text-white shadow-sm shadow-green-600/30'
             : active
-            ? 'bg-fig-600 text-white'
-            : 'bg-black/[0.08] text-ink-faint'
+            ? 'bg-fig-600 text-white shadow-sm shadow-fig-600/30 ring-2 ring-fig-600/15'
+            : 'bg-black/[0.06] text-ink-faint'
         }`}
       >
-        {done ? '✓' : ''}
+        {done ? '✓' : active ? '•' : ''}
       </div>
       <span
         className={`text-[11px] ${
-          active ? 'text-ink-soft font-medium' : done ? 'text-ink-muted' : 'text-ink-faint'
+          active ? 'text-ink-soft font-semibold' : done ? 'text-ink-muted' : 'text-ink-faint'
         }`}
       >
         {label}
