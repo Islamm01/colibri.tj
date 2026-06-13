@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import {
   useCart,
+  wholesaleStep,
   selectSubtotal,
   selectDeliveryFee,
   selectTotal,
@@ -17,6 +18,7 @@ import { SmartImage } from '@/components/images/SmartImage';
 export function CartDrawer() {
   const t = useTranslations('cart');
   const tc = useTranslations('currency');
+  const tm = useTranslations('marketplace');
   const locale = useLocale();
   const router = useRouter();
 
@@ -113,18 +115,22 @@ export function CartDrawer() {
                     </div>
                     <div className="text-[11px] text-cream-100/50 mt-0.5">
                       {formatSom(item.price)} {tc('som')}
-                      {(item.unit === 'kg' || item.unit === 'gram') && ' / кг'}
+                      {(item.unit === 'kg' || item.unit === 'gram' || item.unit === 'ton') &&
+                        ` / ${tm(`unitShort.${item.unit}`)}`}
                     </div>
+                    {item.is_wholesale && (
+                      <span className="inline-block mt-1 text-[9px] font-bold uppercase tracking-wide bg-gold-300/15 text-gold-300 px-1.5 py-0.5 rounded">
+                        {tm('wholesale')}
+                      </span>
+                    )}
                   </div>
 
+                  {(() => {
+                    const step = item.is_wholesale ? wholesaleStep(item.unit) : item.unit === 'kg' ? 0.5 : 1;
+                    return (
                   <div className="flex items-center gap-1 surface-soft rounded-lg px-1 py-0.5 shrink-0">
                     <button
-                      onClick={() =>
-                        setQuantity(
-                          item.product_id,
-                          item.quantity - (item.unit === 'kg' ? 0.5 : 1),
-                        )
-                      }
+                      onClick={() => setQuantity(item.product_id, item.quantity - step)}
                       className="w-6 h-6 flex items-center justify-center text-gold-300 active:scale-90 transition-transform"
                       aria-label="Decrease"
                     >
@@ -136,12 +142,7 @@ export function CartDrawer() {
                       {item.quantity}
                     </span>
                     <button
-                      onClick={() =>
-                        setQuantity(
-                          item.product_id,
-                          item.quantity + (item.unit === 'kg' ? 0.5 : 1),
-                        )
-                      }
+                      onClick={() => setQuantity(item.product_id, item.quantity + step)}
                       className="w-6 h-6 flex items-center justify-center text-gold-300 active:scale-90 transition-transform"
                       aria-label="Increase"
                     >
@@ -150,6 +151,8 @@ export function CartDrawer() {
                       </svg>
                     </button>
                   </div>
+                    );
+                  })()}
 
                   <button
                     onClick={() => removeItem(item.product_id)}

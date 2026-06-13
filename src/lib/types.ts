@@ -29,7 +29,7 @@ export type OrderStatus =
   | 'delivered'
   | 'cancelled';
 
-export type ProductUnit = 'kg' | 'piece' | 'pack' | 'gram';
+export type ProductUnit = 'kg' | 'piece' | 'pack' | 'gram' | 'ton';
 
 export type PaymentMethod = 'cash' | 'qr' | 'bank_transfer';
 
@@ -78,6 +78,9 @@ export interface Product {
   images: ProductImage[];
   is_available: boolean;
   sort_order: number;
+  // Wholesale (Slice 2) — retail products keep is_wholesale=false, min_quantity=null
+  is_wholesale: boolean;
+  min_quantity: number | null;
 }
 
 // Cart items live client-side only (Zustand store) until checkout.
@@ -89,4 +92,7 @@ export interface CartItem {
   unit: ProductUnit;
   quantity: number;
   image_url: string | null;
+  // Wholesale line metadata (optional — absent/false on retail items)
+  is_wholesale?: boolean;
+  min_quantity?: number | null;
 }

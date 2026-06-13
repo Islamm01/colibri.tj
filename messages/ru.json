@@ -234,6 +234,16 @@
     "perKg": "за кг",
     "perPiece": "за шт",
     "perPack": "за упаковку",
+    "perTon": "за тонну",
+    "wholesale": "Оптом",
+    "wholesaleMin": "от {qty} {unit}",
+    "unitShort": {
+      "kg": "кг",
+      "ton": "т",
+      "piece": "шт",
+      "pack": "уп",
+      "gram": "г"
+    },
     "addToCart": "В корзину",
     "added": "Добавлено",
     "outOfStock": "Нет в наличии",
@@ -241,7 +251,9 @@
       "fresh": "Свежие фрукты",
       "dried": "Орехи и сухофрукты",
       "berries": "Ягоды",
-      "citrus": "Цитрусовые"
+      "citrus": "Цитрусовые",
+      "honey": "Мёд",
+      "gift_box": "Подарочные наборы"
     },
     "newStore": "Новый",
     "minutesSuffix": "мин"

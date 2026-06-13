@@ -4,6 +4,7 @@ import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getSupabaseServer, isSupabaseConfigured } from '@/lib/supabase/server';
 import { isStoreOpenNow } from '@/lib/format';
 import type { Store, Product } from '@/lib/types';
+import { categoryOrder, isKnownCategory } from '@/lib/categories';
 import { ProductCard } from '@/components/marketplace/ProductCard';
 import { StoreReviews } from '@/components/marketplace/StoreReviews';
 import { SmartImage } from '@/components/images/SmartImage';
@@ -125,10 +126,12 @@ export default async function StorePage({
 
       {/* Product groups */}
       <div className="pt-4">
-        {Object.entries(grouped).map(([cat, items]) => (
+        {Object.entries(grouped)
+          .sort(([a], [b]) => categoryOrder(a) - categoryOrder(b))
+          .map(([cat, items]) => (
           <section key={cat} className="mb-5">
             <h2 className="px-5 mb-3 text-[11px] font-medium text-cream-100/45 tracking-[1.4px] uppercase">
-              {cat === 'fresh' ? t('category.fresh') : cat === 'dried' ? t('category.dried') : cat}
+              {isKnownCategory(cat) ? t(`category.${cat}`) : cat}
             </h2>
             <div className="px-5 grid grid-cols-2 gap-3 stagger">
               {items.map((p) => (

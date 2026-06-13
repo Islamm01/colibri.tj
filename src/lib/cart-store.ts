@@ -15,7 +15,11 @@ interface CartState {
   _hasHydrated: boolean;
 
   // Actions
-  addItem: (product: Pick<Product, 'id' | 'store_id' | 'price' | 'unit' | 'images'> & { name: string }) => void;
+  addItem: (
+    product: Pick<Product, 'id' | 'store_id' | 'price' | 'unit' | 'images' | 'is_wholesale' | 'min_quantity'> & {
+      name: string;
+    },
+  ) => void;
   removeItem: (productId: string) => void;
   setQuantity: (productId: string, quantity: number) => void;
   clear: () => void;
@@ -34,53 +38,47 @@ export const useCart = create<CartState>()(
       _hasHydrated: false,
       _setHasHydrated: (v) => set({ _hasHydrated: v }),
 
+      // TODO: future — separate wholesale checkout / quote flow.
+      // For now wholesale and retail share one cart; wholesale lines are
+      // flagged (is_wholesale) and shown with a label rather than split out.
       addItem: (product) => {
         const items = get().items;
         const existing = items.find((i) => i.product_id === product.id);
 
+        const isWholesale = product.is_wholesale ?? false;
+        const minQty = product.min_quantity ?? null;
+        // Wholesale items start at their minimum order quantity; retail at 1.
+        const initialQty = isWholesale && minQty && minQty > 0 ? minQty : 1;
+
+        const newLine: CartItem = {
+          product_id: product.id,
+          store_id: product.store_id,
+          name: product.name,
+          price: product.price,
+          unit: product.unit,
+          quantity: initialQty,
+          image_url: product.images?.[0]?.url ?? null,
+          is_wholesale: isWholesale,
+          min_quantity: minQty,
+        };
+
         // If from a different store, replace cart (single-store cart for v1)
         if (get().storeId && get().storeId !== product.store_id) {
-          set({
-            items: [
-              {
-                product_id: product.id,
-                store_id: product.store_id,
-                name: product.name,
-                price: product.price,
-                unit: product.unit,
-                quantity: 1,
-                image_url: product.images?.[0]?.url ?? null,
-              },
-            ],
-            storeId: product.store_id,
-          });
+          set({ items: [newLine], storeId: product.store_id });
           return;
         }
 
         if (existing) {
+          const step = isWholesale ? wholesaleStep(product.unit) : 1;
           set({
             items: items.map((i) =>
               i.product_id === product.id
-                ? { ...i, quantity: roundQty(i.quantity + 1, product.unit) }
+                ? { ...i, quantity: roundQty(i.quantity + step, product.unit) }
                 : i,
             ),
           });
         } else {
-          set({
-            items: [
-              ...items,
-              {
-                product_id: product.id,
-                store_id: product.store_id,
-                name: product.name,
-                price: product.price,
-                unit: product.unit,
-                quantity: 1,
-                image_url: product.images?.[0]?.url ?? null,
-              },
-            ],
-            storeId: product.store_id,
-          });
+          set({ items: [...items, newLine], storeId: product.store_id });
         }
       },
 
@@ -95,9 +93,16 @@ export const useCart = create<CartState>()(
           return;
         }
         set({
-          items: get().items.map((i) =>
-            i.product_id === productId ? { ...i, quantity } : i,
-          ),
+          items: get().items.map((i) => {
+            if (i.product_id !== productId) return i;
+            // Wholesale lines can never drop below their minimum order quantity
+            // (use the remove button to clear them entirely).
+            const floored =
+              i.is_wholesale && i.min_quantity && quantity < i.min_quantity
+                ? i.min_quantity
+                : quantity;
+            return { ...i, quantity: floored };
+          }),
         });
       },
 
@@ -135,8 +140,19 @@ if (typeof window !== 'undefined') {
 
 function roundQty(n: number, unit: ProductUnit): number {
   // For weight units we allow 0.5 increments; for piece/pack we keep integers.
-  if (unit === 'kg' || unit === 'gram') return Math.round(n * 2) / 2;
+  if (unit === 'kg' || unit === 'gram' || unit === 'ton') return Math.round(n * 2) / 2;
   return Math.round(n);
+}
+
+// Sensible bump size when an already-added wholesale line is added again.
+// Bulk weights step in larger chunks than the retail 0.5 kg.
+export function wholesaleStep(unit: ProductUnit): number {
+  switch (unit) {
+    case 'ton': return 1;
+    case 'kg': return 10;
+    case 'gram': return 100;
+    default: return 1; // piece / pack
+  }
 }
 
 // =====================================================================

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useCart } from '@/lib/cart-store';
+import { useCart, wholesaleStep } from '@/lib/cart-store';
 import { formatSom } from '@/lib/format';
 import type { Product } from '@/lib/types';
 import { useShallow } from 'zustand/react/shallow';
@@ -32,10 +32,20 @@ export function ProductCard({ product, locale }: Props) {
     product.unit === 'kg' ? t('perKg')
     : product.unit === 'piece' ? t('perPiece')
     : product.unit === 'pack' ? t('perPack')
+    : product.unit === 'ton' ? t('perTon')
     : t('perKg');
 
   const inCart = hasHydrated && !!item;
   const quantity = item?.quantity ?? 0;
+
+  const isWeight = product.unit === 'kg' || product.unit === 'gram' || product.unit === 'ton';
+  const unitShort = t(`unitShort.${product.unit}`);
+  // Wholesale: enforce a minimum order quantity and step in bulk increments.
+  const isWholesale = product.is_wholesale;
+  const minQty = product.min_quantity ?? 0;
+  const step = isWholesale ? wholesaleStep(product.unit) : product.unit === 'kg' ? 0.5 : 1;
+  const decrease = () => setQuantity(product.id, Math.max(isWholesale ? minQty : 0, quantity - step));
+  const increase = () => setQuantity(product.id, quantity + step);
 
   return (
     <div className="group relative surface rounded-[1.5rem] overflow-hidden card-lift flex flex-col">
@@ -53,15 +63,27 @@ export function ProductCard({ product, locale }: Props) {
         </div>
       </div>
 
+      {/* Wholesale ribbon — top-left over image */}
+      {isWholesale && (
+        <span className="absolute top-2 left-2 z-10 text-[9.5px] font-bold tracking-wide uppercase bg-gold-300 text-forest-900 px-2 py-0.5 rounded-full shadow-soft">
+          {t('wholesale')}
+        </span>
+      )}
+
       {/* Body */}
       <div className="p-3.5 flex-1 flex flex-col">
         <h3 className="text-[14px] font-semibold text-cream-100 leading-tight line-clamp-1">{name}</h3>
         <p className="text-[11px] text-cream-100/45 mt-0.5 line-clamp-1">{unitLabel}</p>
+        {isWholesale && minQty > 0 && (
+          <p className="text-[10.5px] font-medium text-gold-300/90 mt-0.5">
+            {t('wholesaleMin', { qty: minQty, unit: unitShort })}
+          </p>
+        )}
 
         <div className="mt-2.5 flex items-end justify-between gap-2">
           <div className="flex items-baseline gap-0.5">
             <span className="text-[16px] font-bold text-cream-100">{formatSom(product.price)}</span>
-            <span className="text-[11px] text-cream-100/50">{tc('som')}</span>
+            <span className="text-[11px] text-cream-100/50">{tc('som')}{isWholesale ? `/${unitShort}` : ''}</span>
           </div>
 
           {!inCart ? (
@@ -74,6 +96,8 @@ export function ProductCard({ product, locale }: Props) {
                   unit: product.unit,
                   images: product.images,
                   name,
+                  is_wholesale: product.is_wholesale,
+                  min_quantity: product.min_quantity,
                 })
               }
               className="w-10 h-10 rounded-full btn-gold flex items-center justify-center active:scale-90 transition-transform shrink-0"
@@ -86,17 +110,17 @@ export function ProductCard({ product, locale }: Props) {
           ) : (
             <div className="flex items-center gap-1 surface-soft rounded-full px-1 py-1 animate-pop shrink-0">
               <button
-                onClick={() => setQuantity(product.id, quantity - (product.unit === 'kg' ? 0.5 : 1))}
+                onClick={decrease}
                 className="w-7 h-7 flex items-center justify-center text-cream-100 active:scale-90 transition-transform"
                 aria-label="Decrease"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M5 12h14" /></svg>
               </button>
               <span className="text-cream-100 text-[12px] font-semibold tabular-nums min-w-[28px] text-center">
-                {quantity}{(product.unit === 'kg' || product.unit === 'gram') && 'кг'}
+                {quantity}{isWeight && unitShort}
               </span>
               <button
-                onClick={() => setQuantity(product.id, quantity + (product.unit === 'kg' ? 0.5 : 1))}
+                onClick={increase}
                 className="w-7 h-7 flex items-center justify-center text-gold-300 active:scale-90 transition-transform"
                 aria-label="Increase"
               >

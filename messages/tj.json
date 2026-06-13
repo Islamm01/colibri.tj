@@ -234,6 +234,16 @@
     "perKg": "за кг",
     "perPiece": "за дона",
     "perPack": "за бастабандӣ",
+    "perTon": "за тонна",
+    "wholesale": "Яклухт",
+    "wholesaleMin": "аз {qty} {unit}",
+    "unitShort": {
+      "kg": "кг",
+      "ton": "т",
+      "piece": "дона",
+      "pack": "баст",
+      "gram": "г"
+    },
     "addToCart": "Илова кардан",
     "added": "Илова шуд",
     "outOfStock": "Тамом шуд",
@@ -241,7 +251,9 @@
       "fresh": "Меваҳои тоза",
       "dried": "Чормағз ва меваҳои хушк",
       "berries": "Буттамеваҳо",
-      "citrus": "Цитрусӣ"
+      "citrus": "Цитрусӣ",
+      "honey": "Асал",
+      "gift_box": "Тӯҳфаҳо"
     },
     "newStore": "Нав",
     "minutesSuffix": "дақ"

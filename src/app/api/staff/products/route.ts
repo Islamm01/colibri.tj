@@ -5,7 +5,7 @@ import type { ProductUnit } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
-const VALID_UNITS: ProductUnit[] = ['kg', 'piece', 'pack', 'gram'];
+const VALID_UNITS: ProductUnit[] = ['kg', 'piece', 'pack', 'gram', 'ton'];
 
 export async function GET() {
   const session = await readStaffSession();
@@ -41,6 +41,8 @@ export async function POST(request: Request) {
     unit?: ProductUnit;
     stock?: number | null;
     image_url?: string;
+    is_wholesale?: boolean;
+    min_quantity?: number | null;
   };
   try {
     body = await request.json();
@@ -89,6 +91,8 @@ export async function POST(request: Request) {
       images,
       is_available: true,
       sort_order: nextOrder,
+      is_wholesale: body.is_wholesale ?? false,
+      min_quantity: body.is_wholesale ? body.min_quantity ?? null : null,
     })
     .select('*')
     .single();

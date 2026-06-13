@@ -10,6 +10,18 @@ const UNITS: { value: ProductUnit; label: string }[] = [
   { value: 'piece', label: 'шт' },
   { value: 'pack', label: 'уп' },
   { value: 'gram', label: 'г' },
+  { value: 'ton', label: 'тонна' },
+];
+
+// Storefront categories selectable in the admin form (mirrors PRODUCT_CATEGORIES;
+// staff UI is Russian-only, like the rest of this component).
+const CATEGORY_OPTIONS: { value: string; label: string }[] = [
+  { value: 'fresh', label: 'Свежие' },
+  { value: 'dried', label: 'Сухофрукты и орехи' },
+  { value: 'berries', label: 'Ягоды' },
+  { value: 'citrus', label: 'Цитрусовые' },
+  { value: 'honey', label: 'Мёд' },
+  { value: 'gift_box', label: 'Подарочные наборы' },
 ];
 
 export function ProductsManager() {
@@ -175,6 +187,8 @@ function ProductFormDrawer({
   const [category, setCategory] = useState(product?.category ?? 'fresh');
   const [imageUrl, setImageUrl] = useState(product?.images?.[0]?.url ?? '');
   const [stock, setStock] = useState(product?.stock?.toString() ?? '');
+  const [isWholesale, setIsWholesale] = useState(product?.is_wholesale ?? false);
+  const [minQuantity, setMinQuantity] = useState(product?.min_quantity?.toString() ?? '');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploaderOpen, setUploaderOpen] = useState(false);
@@ -200,6 +214,8 @@ function ProductFormDrawer({
         category,
         image_url: imageUrl || undefined,
         stock: stock ? Number(stock) : null,
+        is_wholesale: isWholesale,
+        min_quantity: isWholesale && minQuantity ? Number(minQuantity) : null,
       };
       const res = product
         ? await fetch(`/api/staff/products/${product.id}`, {
@@ -284,10 +300,36 @@ function ProductFormDrawer({
           </div>
           <Field label="Категория">
             <select value={category} onChange={(e) => setCategory(e.target.value)} className="form-input">
-              <option value="fresh">Свежие</option>
-              <option value="dried">Сухофрукты и орехи</option>
+              {CATEGORY_OPTIONS.map((c) => (
+                <option key={c.value} value={c.value}>{c.label}</option>
+              ))}
             </select>
           </Field>
+
+          {/* Wholesale (Slice 2) */}
+          <Field label="Оптовый товар">
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={isWholesale}
+                onChange={(e) => setIsWholesale(e.target.checked)}
+                className="w-4 h-4 accent-fig-600"
+              />
+              <span className="text-[13px] text-ink-soft">Продаётся оптом (тонна/кг, минимальный заказ)</span>
+            </label>
+          </Field>
+          {isWholesale && (
+            <Field label="Минимальный заказ (пусто = без минимума)">
+              <input
+                type="number"
+                inputMode="decimal"
+                value={minQuantity}
+                onChange={(e) => setMinQuantity(e.target.value)}
+                placeholder="напр. 600"
+                className="form-input"
+              />
+            </Field>
+          )}
           <Field label="Изображение">
             {imageUrl ? (
               <div className="flex items-start gap-3">
