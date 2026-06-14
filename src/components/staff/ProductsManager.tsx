@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { Product, ProductUnit } from '@/lib/types';
+import { PRODUCT_CATEGORIES } from '@/lib/categories';
 import { ImageCropUploader } from '@/components/images/ImageCropUploader';
 import { SmartImage } from '@/components/images/SmartImage';
 
@@ -13,16 +14,12 @@ const UNITS: { value: ProductUnit; label: string }[] = [
   { value: 'ton', label: 'тонна' },
 ];
 
-// Storefront categories selectable in the admin form (mirrors PRODUCT_CATEGORIES;
-// staff UI is Russian-only, like the rest of this component).
-const CATEGORY_OPTIONS: { value: string; label: string }[] = [
-  { value: 'fresh', label: 'Свежие' },
-  { value: 'dried', label: 'Сухофрукты и орехи' },
-  { value: 'berries', label: 'Ягоды' },
-  { value: 'citrus', label: 'Цитрусовые' },
-  { value: 'honey', label: 'Мёд' },
-  { value: 'gift_box', label: 'Подарочные наборы' },
-];
+// Storefront categories selectable in the admin form, sourced from the shared
+// taxonomy (single source of truth). Staff UI is Russian-only, like the rest
+// of this component.
+const CATEGORY_OPTIONS: { value: string; label: string }[] = PRODUCT_CATEGORIES.map(
+  (c) => ({ value: c.key, label: c.ru }),
+);
 
 export function ProductsManager() {
   const [products, setProducts] = useState<Product[]>([]);

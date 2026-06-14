@@ -247,14 +247,6 @@
     "addToCart": "Илова кардан",
     "added": "Илова шуд",
     "outOfStock": "Тамом шуд",
-    "category": {
-      "fresh": "Меваҳои тоза",
-      "dried": "Чормағз ва меваҳои хушк",
-      "berries": "Буттамеваҳо",
-      "citrus": "Цитрусӣ",
-      "honey": "Асал",
-      "gift_box": "Тӯҳфаҳо"
-    },
     "newStore": "Нав",
     "minutesSuffix": "дақ"
   },

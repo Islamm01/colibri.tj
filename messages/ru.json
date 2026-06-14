@@ -247,14 +247,6 @@
     "addToCart": "В корзину",
     "added": "Добавлено",
     "outOfStock": "Нет в наличии",
-    "category": {
-      "fresh": "Свежие фрукты",
-      "dried": "Орехи и сухофрукты",
-      "berries": "Ягоды",
-      "citrus": "Цитрусовые",
-      "honey": "Мёд",
-      "gift_box": "Подарочные наборы"
-    },
     "newStore": "Новый",
     "minutesSuffix": "мин"
   },
