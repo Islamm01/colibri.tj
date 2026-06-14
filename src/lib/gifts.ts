@@ -21,10 +21,10 @@ export async function getGiftStoreIds(supabase: ServerClient): Promise<string[]>
   return (data ?? []).map((s: { id: string }) => s.id);
 }
 
-/** Available gift sets across the brand, optionally filtered by type/occasion. */
+/** Available gift sets across the brand, optionally filtered by category type. */
 export async function getGiftProducts(
   supabase: ServerClient,
-  opts: { type?: string; occasion?: string; limit?: number } = {},
+  opts: { type?: string; limit?: number } = {},
 ): Promise<Product[]> {
   const storeIds = await getGiftStoreIds(supabase);
   if (storeIds.length === 0) return [];
@@ -37,11 +37,22 @@ export async function getGiftProducts(
     .order('sort_order');
 
   if (opts.type) query = query.eq('category', opts.type);
-  if (opts.occasion) query = query.contains('occasion', [opts.occasion]);
   if (opts.limit) query = query.limit(opts.limit);
 
   const { data } = await query;
   return (data ?? []) as unknown as Product[];
+}
+
+/**
+ * Resolve a category's cover image. Uses the operator-pinned cover
+ * (is_category_cover) when present, otherwise falls back to the first
+ * available product of that category. Pass the already-fetched product
+ * list so this stays a pure, query-free lookup.
+ */
+export function giftCategoryCover(products: Product[], type: string): string | null {
+  const pinned = products.find((p) => p.category === type && p.is_category_cover);
+  const fallback = products.find((p) => p.category === type);
+  return (pinned ?? fallback)?.images?.[0]?.url ?? null;
 }
 
 /** A single gift set by id (the route's [slug] segment is the product id). */

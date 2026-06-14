@@ -22,7 +22,7 @@ export async function PATCH(
   // Verify product belongs to this store
   const { data: existing } = await supabase
     .from('products')
-    .select('id, store_id, images')
+    .select('id, store_id, images, category')
     .eq('id', id)
     .maybeSingle();
 
@@ -33,7 +33,7 @@ export async function PATCH(
 
   // Build updates from allowed fields only
   const updates: Record<string, unknown> = {};
-  const allowed = ['name_tj', 'name_ru', 'description_tj', 'description_ru', 'category', 'price', 'unit', 'stock', 'is_available', 'is_wholesale', 'min_quantity', 'occasion', 'gift_contents'];
+  const allowed = ['name_tj', 'name_ru', 'description_tj', 'description_ru', 'category', 'price', 'unit', 'stock', 'is_available', 'is_wholesale', 'min_quantity', 'gift_contents'];
   for (const key of allowed) {
     if (key in body) updates[key] = body[key];
   }
@@ -42,6 +42,24 @@ export async function PATCH(
     updates.images = body.image_url
       ? [{ url: body.image_url, w: 800, h: 800 }]
       : [];
+  }
+
+  // Category cover: at most one per (store, category). When pinning this
+  // product as cover, clear any sibling cover in the same category first.
+  if (typeof body.is_category_cover === 'boolean') {
+    updates.is_category_cover = body.is_category_cover;
+    if (body.is_category_cover) {
+      const cat = 'category' in body ? (body.category?.trim() || null) : existing.category;
+      if (cat) {
+        await supabase
+          .from('products')
+          .update({ is_category_cover: false })
+          .eq('store_id', existing.store_id)
+          .eq('category', cat)
+          .eq('is_category_cover', true)
+          .neq('id', id);
+      }
+    }
   }
 
   if (Object.keys(updates).length === 0) {

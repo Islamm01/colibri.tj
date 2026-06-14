@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { Product, ProductUnit } from '@/lib/types';
-import { PRODUCT_CATEGORIES, GIFT_TYPES, GIFT_OCCASIONS } from '@/lib/categories';
+import { PRODUCT_CATEGORIES, GIFT_TYPES } from '@/lib/categories';
 import { ImageCropUploader } from '@/components/images/ImageCropUploader';
 import { SmartImage } from '@/components/images/SmartImage';
 
@@ -91,7 +91,14 @@ export function ProductsManager() {
                 <SmartImage src={p.images?.[0]?.url} alt={p.name_ru} seed={p.name_ru} fallbackWidth={48} fallbackHeight={48} sizes="48px" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-[14px] font-medium text-ink-soft truncate">{p.name_ru}</div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[14px] font-medium text-ink-soft truncate">{p.name_ru}</span>
+                  {p.is_category_cover && (
+                    <span className="shrink-0 text-[9px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full bg-fig-50 text-fig-700">
+                      Обложка
+                    </span>
+                  )}
+                </div>
                 <div className="text-[11px] text-ink-muted truncate">{p.name_tj}</div>
               </div>
               <div className="text-right shrink-0">
@@ -201,15 +208,11 @@ function ProductFormDrawer({
   // Gift-only fields
   const [descRu, setDescRu] = useState(product?.description_ru ?? '');
   const [descTj, setDescTj] = useState(product?.description_tj ?? '');
-  const [occasion, setOccasion] = useState<string[]>(product?.occasion ?? []);
   const [giftContents, setGiftContents] = useState(product?.gift_contents ?? '');
+  const [isCategoryCover, setIsCategoryCover] = useState(product?.is_category_cover ?? false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploaderOpen, setUploaderOpen] = useState(false);
-
-  function toggleOccasion(key: string) {
-    setOccasion((prev) => (prev.includes(key) ? prev.filter((o) => o !== key) : [...prev, key]));
-  }
 
   async function save() {
     setError(null);
@@ -234,12 +237,12 @@ function ProductFormDrawer({
         stock: stock ? Number(stock) : null,
         is_wholesale: isGift ? false : isWholesale,
         min_quantity: !isGift && isWholesale && minQuantity ? Number(minQuantity) : null,
-        // Gift sets carry a story (description) + occasion tags + contents.
+        // Gift sets carry a story (description) + contents + optional cover flag.
         ...(isGift && {
           description_ru: descRu.trim() || null,
           description_tj: descTj.trim() || null,
-          occasion,
           gift_contents: giftContents.trim() || null,
+          is_category_cover: isCategoryCover,
         }),
       };
       const res = product
@@ -334,27 +337,6 @@ function ProductFormDrawer({
           {/* Gift-set fields (only for stores in the 'gifts' vertical) */}
           {isGift && (
             <>
-              <Field label="Повод">
-                <div className="flex flex-wrap gap-2">
-                  {GIFT_OCCASIONS.map((o) => {
-                    const checked = occasion.includes(o.key);
-                    return (
-                      <button
-                        type="button"
-                        key={o.key}
-                        onClick={() => toggleOccasion(o.key)}
-                        className={`px-3 py-1.5 rounded-full text-[12.5px] font-medium border transition-all ${
-                          checked
-                            ? 'bg-fig-600 border-fig-600 text-white'
-                            : 'bg-white border-black/[0.12] text-ink-muted'
-                        }`}
-                      >
-                        {o.ru}
-                      </button>
-                    );
-                  })}
-                </div>
-              </Field>
               <Field label="Описание набора (русский)">
                 <textarea
                   value={descRu}
@@ -379,6 +361,21 @@ function ProductFormDrawer({
                   placeholder="напр. Мёд 0.5 кг, грецкий орех 0.3 кг, курага 0.2 кг"
                   className="form-input resize-none"
                 />
+              </Field>
+              <Field label="Обложка категории">
+                <label className="flex items-start gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={isCategoryCover}
+                    onChange={(e) => setIsCategoryCover(e.target.checked)}
+                    className="w-4 h-4 accent-fig-600 mt-0.5"
+                  />
+                  <span className="text-[13px] text-ink-soft leading-snug">
+                    Использовать это фото как обложку категории «
+                    {categoryOptions.find((c) => c.value === category)?.label ?? category}». Заменит
+                    текущую обложку этой категории.
+                  </span>
+                </label>
               </Field>
             </>
           )}

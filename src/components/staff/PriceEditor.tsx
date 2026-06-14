@@ -29,6 +29,12 @@ export function PriceEditor({ role }: { role: 'admin' | 'operator' }) {
   const [newEmoji, setNewEmoji] = useState('');
   const [newCategory, setNewCategory] = useState('fruit');
   const [photoFor, setPhotoFor] = useState<PriceRow | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  async function describeError(res: Response, fallback: string) {
+    const data = await res.json().catch(() => null);
+    return data?.detail || data?.error || fallback;
+  }
 
   async function load() {
     // Use the staff catalog (latest row per item) so the list stays stable —
@@ -52,6 +58,7 @@ export function PriceEditor({ role }: { role: 'admin' | 'operator' }) {
   async function addProduct() {
     if (!newName.trim()) return;
     setAdding(true);
+    setError(null);
     try {
       const res = await fetch('/api/staff/price-index', {
         method: 'POST',
@@ -68,7 +75,11 @@ export function PriceEditor({ role }: { role: 'admin' | 'operator' }) {
         setNewEmoji('');
         setNewCategory('fruit');
         await load();
+      } else {
+        setError(await describeError(res, 'Не удалось добавить продукт'));
       }
+    } catch {
+      setError('Ошибка сети. Проверьте соединение.');
     } finally {
       setAdding(false);
     }
@@ -84,8 +95,13 @@ export function PriceEditor({ role }: { role: 'admin' | 'operator' }) {
         body: JSON.stringify({ item_key: row.item_key }),
       });
       if (res.ok) {
+        setError(null);
         setRows((prev) => prev.filter((r) => r.item_key !== row.item_key));
+      } else {
+        setError(await describeError(res, 'Не удалось удалить продукт'));
       }
+    } catch {
+      setError('Ошибка сети. Проверьте соединение.');
     } finally {
       setDeletingKey(null);
     }
@@ -125,9 +141,14 @@ export function PriceEditor({ role }: { role: 'admin' | 'operator' }) {
         }),
       });
       if (res.ok) {
+        setError(null);
         setSavedKey(row.item_key);
         setTimeout(() => setSavedKey(null), 2000);
+      } else {
+        setError(await describeError(res, 'Не удалось сохранить цены'));
       }
+    } catch {
+      setError('Ошибка сети. Проверьте соединение.');
     } finally {
       setSavingKey(null);
     }
@@ -143,6 +164,12 @@ export function PriceEditor({ role }: { role: 'admin' | 'operator' }) {
       <p className="text-[13px] text-ink-muted mb-5">
         Обновите цены — клиенты видят их на странице «Цены Худжанда». Указывайте диапазон в сомони за кг.
       </p>
+
+      {error && (
+        <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-[13px] text-red-700">
+          {error}
+        </div>
+      )}
 
       {isAdmin && (
         <div className="bg-white rounded-2xl border border-black/[0.06] p-3.5 shadow-soft mb-5">

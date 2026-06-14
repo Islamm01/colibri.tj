@@ -63,11 +63,6 @@ export default async function GiftDetailPage({
               {giftTagLabel(product.category, locale)}
             </span>
           )}
-          {(product.occasion ?? []).map((o) => (
-            <span key={o} className="text-[10px] text-cream-100/60 border border-gold-300/15 px-2 py-0.5 rounded-full">
-              {giftTagLabel(o, locale)}
-            </span>
-          ))}
         </div>
         <h1 className="font-serif text-[26px] text-cream-100 leading-tight">{name}</h1>
         <div className="mt-2 flex items-baseline gap-1">

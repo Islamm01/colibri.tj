@@ -57,9 +57,8 @@ export function categoryLabel(cat: string, locale: string): string {
 // =====================================================================
 // Gifts by Colibri — curated gift taxonomy (vertical = 'gifts')
 //
-// Two independent tag axes drive the storefront filters:
-//   • TYPE     — stored in products.category (one per gift set)
-//   • OCCASION — stored in products.occasion (a text[] of tags)
+// Launch structure is intentionally simple: three entry categories and a
+// single combined catalog. The gift TYPE is stored in products.category.
 // Staff labels are Russian-only (like the rest of the staff UI);
 // customer-facing labels come from the `gifts` i18n namespace.
 // =====================================================================
@@ -70,37 +69,22 @@ export interface GiftTagDef {
   ru: string;
 }
 
-/** Gift TYPE axis — what the set fundamentally is. Stored in products.category. */
+/** The three launch gift categories. Stored in products.category. */
 export const GIFT_TYPES = [
-  { key: 'fruit_basket', tj: 'Сабади мева',          ru: 'Фруктовая корзина' },
-  { key: 'dried_basket', tj: 'Сабади меваи хушк',    ru: 'Корзина сухофруктов' },
-  { key: 'honey',        tj: 'Маҷмӯаи асал',          ru: 'Медовый набор' },
-  { key: 'honey_nuts',   tj: 'Асал ва чормағз',       ru: 'Мёд и орехи' },
-  { key: 'honey_dried',  tj: 'Асал ва меваи хушк',    ru: 'Мёд и сухофрукты' },
-  { key: 'gift_box',     tj: 'Қуттии тӯҳфа',          ru: 'Подарочная коробка' },
-] as const satisfies readonly GiftTagDef[];
-
-/** Gift OCCASION axis — when/why it's given. Stored in products.occasion[]. */
-export const GIFT_OCCASIONS = [
-  { key: 'holiday',   tj: 'Идона',       ru: 'Праздничные' },
-  { key: 'corporate', tj: 'Корпоративӣ', ru: 'Корпоративные' },
-  { key: 'custom',    tj: 'Фармоишӣ',    ru: 'На заказ' },
+  { key: 'fruit_basket', tj: 'Сабадҳои мева', ru: 'Фруктовые корзины' },
+  { key: 'honey',        tj: 'Маҷмӯаи асал',  ru: 'Медовые наборы' },
+  { key: 'gift_box',     tj: 'Қуттиҳои тӯҳфа', ru: 'Подарочные коробки' },
 ] as const satisfies readonly GiftTagDef[];
 
 export type GiftType = (typeof GIFT_TYPES)[number]['key'];
-export type GiftOccasion = (typeof GIFT_OCCASIONS)[number]['key'];
 
 export function isGiftType(key: string): key is GiftType {
   return GIFT_TYPES.some((g) => g.key === key);
 }
 
-export function isGiftOccasion(key: string): key is GiftOccasion {
-  return GIFT_OCCASIONS.some((g) => g.key === key);
-}
-
-/** Localized label for any gift tag (type or occasion); falls back to the raw key. */
+/** Localized label for a gift category; falls back to the raw key. */
 export function giftTagLabel(key: string, locale: string): string {
-  const def = [...GIFT_TYPES, ...GIFT_OCCASIONS].find((g) => g.key === key);
+  const def = GIFT_TYPES.find((g) => g.key === key);
   if (!def) return key;
   return locale === 'ru' ? def.ru : def.tj;
 }

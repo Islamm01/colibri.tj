@@ -27,7 +27,9 @@ export default async function HomePage({
 
   // Get live store count if Supabase is configured; otherwise show setup notice
   let fruitStoreCount = 1;
+  let fruitImageUrl: string | null = null;
   let featuredGift: Product | null = null;
+  let giftImageUrl: string | null = null;
   let supabaseReady = isSupabaseConfigured();
 
   if (supabaseReady) {
@@ -40,8 +42,23 @@ export default async function HomePage({
         .eq('is_active', true);
       fruitStoreCount = count ?? 1;
 
-      const gifts = await getGiftProducts(supabase, { limit: 1 });
+      // A representative fruit cover for the pillar card background.
+      const { data: fruitStore } = await supabase
+        .from('stores')
+        .select('cover_image_url')
+        .eq('vertical', 'fruits')
+        .eq('is_active', true)
+        .not('cover_image_url', 'is', null)
+        .order('rating', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      fruitImageUrl = fruitStore?.cover_image_url ?? null;
+
+      const gifts = await getGiftProducts(supabase, { limit: 12 });
       featuredGift = gifts[0] ?? null;
+      // Pillar art prefers an operator-pinned category cover, else the featured set.
+      giftImageUrl =
+        (gifts.find((g) => g.is_category_cover) ?? featuredGift)?.images?.[0]?.url ?? null;
     } catch {
       supabaseReady = false;
     }
@@ -53,7 +70,11 @@ export default async function HomePage({
       <HeroGreeting name={session?.name ?? null} />
       <TrustStrip />
       {!supabaseReady && <SetupNotice locale={locale} />}
-      <ActiveVerticals fruitStoreCount={fruitStoreCount} />
+      <ActiveVerticals
+        fruitStoreCount={fruitStoreCount}
+        fruitImageUrl={fruitImageUrl}
+        giftImageUrl={giftImageUrl}
+      />
       <GiftFeatureStrip product={featuredGift} locale={locale} />
       <PriceIndexBanner />
       <WhyColibri />
