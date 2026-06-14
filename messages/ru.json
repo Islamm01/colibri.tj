@@ -10,6 +10,7 @@
   "nav": {
     "home": "Главная",
     "search": "Поиск",
+    "gifts": "Подарки",
     "cart": "Корзина",
     "orders": "Заказы",
     "profile": "Профиль"
@@ -164,19 +165,12 @@
     "subtitle": "Расскажите о своём бизнесе — мы свяжемся в течение 1-2 дней.",
     "businessSection": "Бизнес",
     "businessNamePlaceholder": "Название магазина или компании",
-    "verticalSection": "Категория",
-    "categoryPlaceholder": "Что продаёте? (например: сухофрукты, лекарства)",
+    "categoryPlaceholder": "Что продаёте? (например: сухофрукты, орехи)",
     "contactSection": "Контакты",
     "contactNamePlaceholder": "Ваше имя",
     "addressPlaceholder": "Адрес (если есть магазин)",
     "aboutSection": "О себе",
     "aboutPlaceholder": "Расскажите о бизнесе: сколько лет работаете, чем особенны...",
-    "verticals": {
-      "fruits": "Фрукты и орехи",
-      "pharmacy": "Аптека",
-      "agro": "Агро",
-      "other": "Другое"
-    },
     "submit": "Отправить заявку",
     "submitting": "Отправка...",
     "success": {
@@ -203,6 +197,11 @@
       "stat1": "от 15 сом",
       "stat2": "60 мин"
     },
+    "gifts": {
+      "brand": "Gifts by Colibri",
+      "title": "Подарки от Colibri",
+      "subtitle": "Премиальные подарочные наборы для любого повода"
+    },
     "pharmacy": {
       "title": "Аптека",
       "subtitle": "Лекарства на дом",
@@ -222,6 +221,49 @@
       "title": "Фермеры",
       "subtitle": "Напрямую из сада",
       "month": "ИЮНЬ"
+    }
+  },
+  "gifts": {
+    "brand": "Gifts by Colibri",
+    "heroTitle": "Подарки ручной сборки от Colibri",
+    "heroSubtitle": "Премиальные наборы из фруктов, мёда и сухофруктов — собраны с любовью.",
+    "shopByOccasion": "По поводу",
+    "shopByType": "По типу",
+    "featured": "Сезонные наборы",
+    "empty": "Здесь пока нет наборов",
+    "emptyHint": "Скоро добавим новые наборы",
+    "story": "О наборе",
+    "contents": "Что внутри",
+    "giftOptions": "Оформление подарка",
+    "recipientLabel": "Имя получателя",
+    "recipientPlaceholder": "Для кого подарок?",
+    "messageLabel": "Сообщение к подарку",
+    "messagePlaceholder": "Напишите тёплые слова (необязательно)",
+    "dateLabel": "Дата доставки",
+    "dateHint": "Необязательно — выберите желаемый день",
+    "addToCart": "В корзину",
+    "added": "Добавлено ✓",
+    "custom": {
+      "title": "Соберите свой набор",
+      "subtitle": "Расскажите о пожеланиях — мы соберём уникальный набор.",
+      "cta": "Запросить набор на заказ",
+      "nameLabel": "Ваше имя",
+      "namePlaceholder": "Как вас зовут",
+      "phoneLabel": "Телефон",
+      "phonePlaceholder": "+992 92 123 45 67",
+      "budgetLabel": "Бюджет (сом)",
+      "budgetPlaceholder": "например, 500",
+      "occasionLabel": "Повод",
+      "occasionOther": "Другое",
+      "preferencesLabel": "Пожелания",
+      "preferencesPlaceholder": "Что включить? Вкусы, аллергии и т.д.",
+      "submit": "Отправить запрос",
+      "submitting": "Отправка...",
+      "success": "Запрос принят",
+      "successHint": "Мы скоро свяжемся с вами.",
+      "error": "Произошла ошибка. Попробуйте ещё раз.",
+      "errorName": "Введите имя",
+      "errorPhone": "Неверный номер телефона"
     }
   },
   "marketplace": {
@@ -327,7 +369,11 @@
     "mapConfirm": "Подтвердить",
     "subtotal": "Сумма",
     "delivery": "Доставка",
-    "total": "Итого"
+    "total": "Итого",
+    "giftSection": "Подарок",
+    "giftRecipient": "Получатель",
+    "giftMessage": "Сообщение",
+    "giftDate": "Дата доставки"
   },
   "track": {
     "title": "Ваш заказ",

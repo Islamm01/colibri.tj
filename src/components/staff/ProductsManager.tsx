@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { Product, ProductUnit } from '@/lib/types';
-import { PRODUCT_CATEGORIES } from '@/lib/categories';
+import { PRODUCT_CATEGORIES, GIFT_TYPES, GIFT_OCCASIONS } from '@/lib/categories';
 import { ImageCropUploader } from '@/components/images/ImageCropUploader';
 import { SmartImage } from '@/components/images/SmartImage';
 
@@ -23,6 +23,7 @@ const CATEGORY_OPTIONS: { value: string; label: string }[] = PRODUCT_CATEGORIES.
 
 export function ProductsManager() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [storeVertical, setStoreVertical] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Product | null>(null);
   const [creating, setCreating] = useState(false);
@@ -33,6 +34,7 @@ export function ProductsManager() {
       const res = await fetch('/api/staff/products');
       const data = await res.json();
       setProducts(data.products ?? []);
+      setStoreVertical(data.store_vertical ?? null);
     } finally {
       setLoading(false);
     }
@@ -153,6 +155,7 @@ export function ProductsManager() {
       {(editing || creating) && (
         <ProductFormDrawer
           product={editing}
+          storeVertical={storeVertical}
           onClose={() => {
             setEditing(null);
             setCreating(false);
@@ -170,25 +173,43 @@ export function ProductsManager() {
 
 function ProductFormDrawer({
   product,
+  storeVertical,
   onClose,
   onSaved,
 }: {
   product: Product | null;
+  storeVertical: string | null;
   onClose: () => void;
   onSaved: () => void;
 }) {
+  const isGift = storeVertical === 'gifts';
+  const categoryOptions = isGift
+    ? GIFT_TYPES.map((g) => ({ value: g.key, label: g.ru }))
+    : CATEGORY_OPTIONS;
+
   const [nameRu, setNameRu] = useState(product?.name_ru ?? '');
   const [nameTj, setNameTj] = useState(product?.name_tj ?? '');
   const [price, setPrice] = useState(product?.price.toString() ?? '');
-  const [unit, setUnit] = useState<ProductUnit>(product?.unit ?? 'kg');
-  const [category, setCategory] = useState(product?.category ?? 'fresh');
+  const [unit, setUnit] = useState<ProductUnit>(product?.unit ?? (isGift ? 'piece' : 'kg'));
+  const [category, setCategory] = useState(
+    product?.category ?? (isGift ? GIFT_TYPES[0].key : 'fresh'),
+  );
   const [imageUrl, setImageUrl] = useState(product?.images?.[0]?.url ?? '');
   const [stock, setStock] = useState(product?.stock?.toString() ?? '');
   const [isWholesale, setIsWholesale] = useState(product?.is_wholesale ?? false);
   const [minQuantity, setMinQuantity] = useState(product?.min_quantity?.toString() ?? '');
+  // Gift-only fields
+  const [descRu, setDescRu] = useState(product?.description_ru ?? '');
+  const [descTj, setDescTj] = useState(product?.description_tj ?? '');
+  const [occasion, setOccasion] = useState<string[]>(product?.occasion ?? []);
+  const [giftContents, setGiftContents] = useState(product?.gift_contents ?? '');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploaderOpen, setUploaderOpen] = useState(false);
+
+  function toggleOccasion(key: string) {
+    setOccasion((prev) => (prev.includes(key) ? prev.filter((o) => o !== key) : [...prev, key]));
+  }
 
   async function save() {
     setError(null);
@@ -211,8 +232,15 @@ function ProductFormDrawer({
         category,
         image_url: imageUrl || undefined,
         stock: stock ? Number(stock) : null,
-        is_wholesale: isWholesale,
-        min_quantity: isWholesale && minQuantity ? Number(minQuantity) : null,
+        is_wholesale: isGift ? false : isWholesale,
+        min_quantity: !isGift && isWholesale && minQuantity ? Number(minQuantity) : null,
+        // Gift sets carry a story (description) + occasion tags + contents.
+        ...(isGift && {
+          description_ru: descRu.trim() || null,
+          description_tj: descTj.trim() || null,
+          occasion,
+          gift_contents: giftContents.trim() || null,
+        }),
       };
       const res = product
         ? await fetch(`/api/staff/products/${product.id}`, {
@@ -295,37 +323,93 @@ function ProductFormDrawer({
               </select>
             </Field>
           </div>
-          <Field label="Категория">
+          <Field label={isGift ? 'Тип набора' : 'Категория'}>
             <select value={category} onChange={(e) => setCategory(e.target.value)} className="form-input">
-              {CATEGORY_OPTIONS.map((c) => (
+              {categoryOptions.map((c) => (
                 <option key={c.value} value={c.value}>{c.label}</option>
               ))}
             </select>
           </Field>
 
-          {/* Wholesale (Slice 2) */}
-          <Field label="Оптовый товар">
-            <label className="flex items-center gap-2 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={isWholesale}
-                onChange={(e) => setIsWholesale(e.target.checked)}
-                className="w-4 h-4 accent-fig-600"
-              />
-              <span className="text-[13px] text-ink-soft">Продаётся оптом (тонна/кг, минимальный заказ)</span>
-            </label>
-          </Field>
-          {isWholesale && (
-            <Field label="Минимальный заказ (пусто = без минимума)">
-              <input
-                type="number"
-                inputMode="decimal"
-                value={minQuantity}
-                onChange={(e) => setMinQuantity(e.target.value)}
-                placeholder="напр. 600"
-                className="form-input"
-              />
-            </Field>
+          {/* Gift-set fields (only for stores in the 'gifts' vertical) */}
+          {isGift && (
+            <>
+              <Field label="Повод">
+                <div className="flex flex-wrap gap-2">
+                  {GIFT_OCCASIONS.map((o) => {
+                    const checked = occasion.includes(o.key);
+                    return (
+                      <button
+                        type="button"
+                        key={o.key}
+                        onClick={() => toggleOccasion(o.key)}
+                        className={`px-3 py-1.5 rounded-full text-[12.5px] font-medium border transition-all ${
+                          checked
+                            ? 'bg-fig-600 border-fig-600 text-white'
+                            : 'bg-white border-black/[0.12] text-ink-muted'
+                        }`}
+                      >
+                        {o.ru}
+                      </button>
+                    );
+                  })}
+                </div>
+              </Field>
+              <Field label="Описание набора (русский)">
+                <textarea
+                  value={descRu}
+                  onChange={(e) => setDescRu(e.target.value)}
+                  rows={2}
+                  className="form-input resize-none"
+                />
+              </Field>
+              <Field label="Описание набора (тоҷикӣ)">
+                <textarea
+                  value={descTj}
+                  onChange={(e) => setDescTj(e.target.value)}
+                  rows={2}
+                  className="form-input resize-none"
+                />
+              </Field>
+              <Field label="Что внутри">
+                <textarea
+                  value={giftContents}
+                  onChange={(e) => setGiftContents(e.target.value)}
+                  rows={3}
+                  placeholder="напр. Мёд 0.5 кг, грецкий орех 0.3 кг, курага 0.2 кг"
+                  className="form-input resize-none"
+                />
+              </Field>
+            </>
+          )}
+
+          {/* Wholesale (Slice 2) — not applicable to gift sets */}
+          {!isGift && (
+            <>
+              <Field label="Оптовый товар">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={isWholesale}
+                    onChange={(e) => setIsWholesale(e.target.checked)}
+                    className="w-4 h-4 accent-fig-600"
+                  />
+                  <span className="text-[13px] text-ink-soft">Продаётся оптом (тонна/кг, минимальный заказ)</span>
+                </label>
+              </Field>
+              {isWholesale && (
+                <Field label="Минимальный заказ (пусто = без минимума)">
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    value={minQuantity}
+                    onChange={(e) => setMinQuantity(e.target.value)}
+                    placeholder="напр. 600"
+                    className="form-input"
+                  />
+                </Field>
+              )}
+            </>
           )}
           <Field label="Изображение">
             {imageUrl ? (

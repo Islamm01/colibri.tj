@@ -81,6 +81,18 @@ export interface Product {
   // Wholesale (Slice 2) — retail products keep is_wholesale=false, min_quantity=null
   is_wholesale: boolean;
   min_quantity: number | null;
+  // Gifts (Stage B) — only set for products in a 'gifts' vertical store.
+  // `category` carries the gift TYPE; `occasion` the occasion tags.
+  occasion: string[] | null;
+  gift_contents: string | null;
+}
+
+// Gift-order options collected on the gift detail page and carried through
+// checkout to the order. Null/absent for retail and parcel orders.
+export interface GiftOptions {
+  recipient_name: string;
+  gift_message: string;
+  scheduled_date: string | null; // ISO date (yyyy-mm-dd) or null
 }
 
 // Cart items live client-side only (Zustand store) until checkout.

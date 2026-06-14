@@ -10,6 +10,7 @@ export async function GET(request: Request) {
 
   const url = new URL(request.url);
   const includeCompleted = url.searchParams.get('completed') === '1';
+  const vertical = url.searchParams.get('vertical');
 
   const supabase = getSupabaseAdmin();
 
@@ -21,11 +22,16 @@ export async function GET(request: Request) {
       notes, prep_eta_minutes, delivery_eta_minutes,
       created_at, accepted_at, ready_at, picked_up_at, delivered_at,
       store_id, courier_id, vertical,
+      recipient_name, gift_message, scheduled_date,
       address:address_id (formatted_address, details),
       items:order_items (id, name_snapshot, price_snapshot, unit_snapshot, quantity, subtotal),
       store:store_id (id, name)
     `)
     .order('created_at', { ascending: false });
+
+  if (vertical) {
+    query = query.eq('vertical', vertical);
+  }
 
   // Store owner sees only their store
   if (session.role === 'store_owner') {

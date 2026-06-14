@@ -10,6 +10,7 @@
   "nav": {
     "home": "Асосӣ",
     "search": "Ҷустуҷӯ",
+    "gifts": "Тӯҳфаҳо",
     "cart": "Сабад",
     "orders": "Фармоиш",
     "profile": "Ман"
@@ -164,19 +165,12 @@
     "subtitle": "Дар бораи тиҷорати худ маълумот диҳед — мо тамос мегирем дар 1-2 рӯз.",
     "businessSection": "Тиҷорат",
     "businessNamePlaceholder": "Номи фурӯшгоҳ ё ширкат",
-    "verticalSection": "Категория",
-    "categoryPlaceholder": "Шумо чӣ мефурӯшед? (масалан: меваи хушк, дору)",
+    "categoryPlaceholder": "Шумо чӣ мефурӯшед? (масалан: меваи хушк, чормағз)",
     "contactSection": "Тамос",
     "contactNamePlaceholder": "Ному насби шумо",
     "addressPlaceholder": "Суроға (агар фурӯшгоҳ доред)",
     "aboutSection": "Дар бораи худатон",
     "aboutPlaceholder": "Тиҷорати худро тавсиф кунед: чанд сол кор мекунед, чӣ махсус доред...",
-    "verticals": {
-      "fruits": "Мева ва чормағз",
-      "pharmacy": "Дорухона",
-      "agro": "Кишоварзӣ",
-      "other": "Дигар"
-    },
     "submit": "Аризаро ирсол кунед",
     "submitting": "Ирсол шуда истодааст...",
     "success": {
@@ -203,6 +197,11 @@
       "stat1": "аз 15 сом",
       "stat2": "60 дақ"
     },
+    "gifts": {
+      "brand": "Gifts by Colibri",
+      "title": "Тӯҳфаҳо аз Colibri",
+      "subtitle": "Маҷмӯаҳои аълои тӯҳфа барои ҳар муносибат"
+    },
     "pharmacy": {
       "title": "Дорухона",
       "subtitle": "Доруҳо ба хона",
@@ -222,6 +221,49 @@
       "title": "Деҳқонон",
       "subtitle": "Мустақим аз боғ",
       "month": "ИЮН"
+    }
+  },
+  "gifts": {
+    "brand": "Gifts by Colibri",
+    "heroTitle": "Тӯҳфаҳои дастчини Colibri",
+    "heroSubtitle": "Маҷмӯаҳои аълои мева, асал ва меваи хушк — бо муҳаббат печонда шуда.",
+    "shopByOccasion": "Аз рӯи муносибат",
+    "shopByType": "Аз рӯи навъ",
+    "featured": "Маҷмӯаҳои мавсимӣ",
+    "empty": "Дар ин ҷо ҳоло маҷмӯа нест",
+    "emptyHint": "Ба зудӣ маҷмӯаҳои нав илова мешаванд",
+    "story": "Дар бораи маҷмӯа",
+    "contents": "Дар дохили он",
+    "giftOptions": "Тарзи тӯҳфа",
+    "recipientLabel": "Номи гиранда",
+    "recipientPlaceholder": "Барои кӣ?",
+    "messageLabel": "Паёми тӯҳфа",
+    "messagePlaceholder": "Як паёми гарм нависед (на ҳатмӣ)",
+    "dateLabel": "Санаи расондан",
+    "dateHint": "Ихтиёрӣ — рӯзи дилхоҳро интихоб кунед",
+    "addToCart": "Ба сабад илова кардан",
+    "added": "Илова шуд ✓",
+    "custom": {
+      "title": "Маҷмӯаи фармоишӣ созед",
+      "subtitle": "Дилхоҳатонро бигӯед — мо маҷмӯаи беҳамто омода мекунем.",
+      "cta": "Дархости маҷмӯаи фармоишӣ",
+      "nameLabel": "Номи шумо",
+      "namePlaceholder": "Номатонро нависед",
+      "phoneLabel": "Телефон",
+      "phonePlaceholder": "+992 92 123 45 67",
+      "budgetLabel": "Буҷа (сом)",
+      "budgetPlaceholder": "масалан, 500",
+      "occasionLabel": "Муносибат",
+      "occasionOther": "Дигар",
+      "preferencesLabel": "Хоҳишҳо",
+      "preferencesPlaceholder": "Чӣ дохил шавад? Завқ, аллергия ва ғ.",
+      "submit": "Дархост фиристодан",
+      "submitting": "Ирсол...",
+      "success": "Дархости шумо қабул шуд",
+      "successHint": "Мо ба зудӣ бо шумо тамос мегирем.",
+      "error": "Хатогӣ рӯй дод. Боз кӯшиш кунед.",
+      "errorName": "Номатонро нависед",
+      "errorPhone": "Рақами телефон нодуруст"
     }
   },
   "marketplace": {
@@ -327,7 +369,11 @@
     "mapConfirm": "Тасдиқ",
     "subtotal": "Маблағ",
     "delivery": "Расондан",
-    "total": "Ҷамъ"
+    "total": "Ҷамъ",
+    "giftSection": "Тӯҳфа",
+    "giftRecipient": "Гиранда",
+    "giftMessage": "Паём",
+    "giftDate": "Санаи расондан"
   },
   "track": {
     "title": "Фармоиши шумо",

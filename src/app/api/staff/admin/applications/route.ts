@@ -1,26 +1,10 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { readStaffSession } from '@/lib/staff/session';
-import { hashPassword } from '@/lib/staff/password';
 import { normalizePhone } from '@/lib/validation';
+import { provisionStoreOwner, uniqueStoreSlug } from '@/lib/staff/provisioning';
 
 export const dynamic = 'force-dynamic';
-
-function slugify(name: string): string {
-  const base = name
-    .toLowerCase()
-    .replace(/[^a-z0-9а-яёҷқўғҳӣ\s-]/gi, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .slice(0, 40);
-  return base || 'store';
-}
-
-function randomPassword(): string {
-  // Readable temporary password: colibri-XXXX
-  const n = Math.floor(1000 + Math.random() * 9000);
-  return `colibri-${n}`;
-}
 
 // GET — list applications (admin only)
 export async function GET(request: Request) {
@@ -69,43 +53,24 @@ export async function POST(request: Request) {
   const phone = normalizePhone(app.phone);
   if (!phone) return NextResponse.json({ error: 'invalid_phone' }, { status: 400 });
 
-  // 1. Create (or find) the store-owner user account
-  const { data: existingUser } = await supabase
-    .from('users')
-    .select('id, role')
-    .eq('phone', phone)
-    .maybeSingle();
-
-  const tempPassword = randomPassword();
+  // 1. Create (or promote) the store-owner user account
   let ownerId: string;
-
-  if (existingUser) {
-    ownerId = existingUser.id;
-    // Promote to store_owner and set a password if they were a soft customer
-    await supabase
-      .from('users')
-      .update({ role: 'store_owner', password_hash: await hashPassword(tempPassword) })
-      .eq('id', ownerId);
-  } else {
-    const { data: newUser, error: userErr } = await supabase
-      .from('users')
-      .insert({
-        phone,
-        name: app.contact_name,
-        role: 'store_owner',
-        password_hash: await hashPassword(tempPassword),
-      })
-      .select('id')
-      .single();
-    if (userErr || !newUser) {
-      return NextResponse.json({ error: 'user_create_failed', detail: userErr?.message }, { status: 500 });
-    }
-    ownerId = newUser.id;
+  let tempPassword: string;
+  try {
+    const provisioned = await provisionStoreOwner(supabase, phone, app.contact_name);
+    ownerId = provisioned.ownerId;
+    tempPassword = provisioned.password;
+  } catch (e) {
+    return NextResponse.json(
+      { error: 'user_create_failed', detail: e instanceof Error ? e.message : undefined },
+      { status: 500 },
+    );
   }
 
-  // 2. Create the store
+  // 2. Create the store. Partner onboarding is fruit/produce only now; legacy
+  // pharmacy/agro applications keep their vertical for historical accuracy.
   const vertical = app.vertical === 'pharmacy' ? 'pharmacy' : app.vertical === 'agro' ? 'agro' : 'fruits';
-  const slug = `${slugify(app.business_name)}-${Math.floor(Math.random() * 1000)}`;
+  const slug = uniqueStoreSlug(app.business_name);
   const { data: store, error: storeErr } = await supabase
     .from('stores')
     .insert({

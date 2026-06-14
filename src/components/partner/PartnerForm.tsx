@@ -9,13 +9,6 @@ interface Props {
   defaultPhone: string;
 }
 
-const VERTICALS = [
-  { value: 'fruits', icon: '🍎' },
-  { value: 'pharmacy', icon: '💊' },
-  { value: 'agro', icon: '🌱' },
-  { value: 'other', icon: '📦' },
-];
-
 export function PartnerForm({ locale, defaultContactName, defaultPhone }: Props) {
   const t = useTranslations('partner');
 
@@ -23,7 +16,6 @@ export function PartnerForm({ locale, defaultContactName, defaultPhone }: Props)
   const [contactName, setContactName] = useState(defaultContactName);
   const [phone, setPhone] = useState(defaultPhone);
   const [address, setAddress] = useState('');
-  const [vertical, setVertical] = useState<string>('fruits');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
 
@@ -55,7 +47,7 @@ export function PartnerForm({ locale, defaultContactName, defaultPhone }: Props)
           contact_name: contactName,
           phone,
           address: address || undefined,
-          vertical,
+          vertical: 'fruits', // single direction: Fruits & Dried Fruits (incl. nuts)
           category: category || undefined,
           description: description || undefined,
         }),
@@ -97,31 +89,6 @@ export function PartnerForm({ locale, defaultContactName, defaultPhone }: Props)
           placeholder={t('businessNamePlaceholder')}
           className="form-input"
         />
-        <div className="mt-3">
-          <div className="text-[10px] uppercase tracking-[1.4px] text-cream-100/45 mb-2 px-1">
-            {t('verticalSection')}
-          </div>
-          <div className="grid grid-cols-4 gap-2">
-            {VERTICALS.map((v) => {
-              const active = vertical === v.value;
-              return (
-                <button
-                  key={v.value}
-                  type="button"
-                  onClick={() => setVertical(v.value)}
-                  className={`px-2 py-3 rounded-xl text-[11px] font-medium transition-all border ${
-                    active
-                      ? 'bg-gold-300/15 border-fig-600/40 text-gold-300'
-                      : 'surface border-gold-300/10 text-cream-100'
-                  }`}
-                >
-                  <div className="text-[18px] mb-0.5">{v.icon}</div>
-                  {t(`verticals.${v.value}`)}
-                </button>
-              );
-            })}
-          </div>
-        </div>
         <input
           type="text"
           value={category}

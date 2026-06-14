@@ -33,7 +33,7 @@ export async function PATCH(
 
   // Build updates from allowed fields only
   const updates: Record<string, unknown> = {};
-  const allowed = ['name_tj', 'name_ru', 'description_tj', 'description_ru', 'category', 'price', 'unit', 'stock', 'is_available', 'is_wholesale', 'min_quantity'];
+  const allowed = ['name_tj', 'name_ru', 'description_tj', 'description_ru', 'category', 'price', 'unit', 'stock', 'is_available', 'is_wholesale', 'min_quantity', 'occasion', 'gift_contents'];
   for (const key of allowed) {
     if (key in body) updates[key] = body[key];
   }

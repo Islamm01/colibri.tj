@@ -7,7 +7,7 @@ import { useCart, selectItemCount } from '@/lib/cart-store';
 import { cn } from '@/lib/cn';
 
 interface Tab {
-  key: 'home' | 'search' | 'cart' | 'orders' | 'profile';
+  key: 'home' | 'search' | 'gifts' | 'cart' | 'orders' | 'profile';
   href: (locale: string) => string;
   icon: React.ReactNode;
   match: (path: string, locale: string) => boolean;
@@ -23,6 +23,11 @@ const Icon = {
   Search: (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
+    </svg>
+  ),
+  Gift: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7S9 2 6.5 4 9 7 12 7Zm0 0s3-5 5.5-3S15 7 12 7Z" />
     </svg>
   ),
   Bag: (
@@ -60,6 +65,7 @@ export function BottomNav() {
   const tabs: Tab[] = [
     { key: 'home', href: (l) => `/${l}`, icon: Icon.Home, match: (p, l) => p === `/${l}` },
     { key: 'search', href: (l) => `/${l}/marketplace`, icon: Icon.Search, match: (p, l) => p.startsWith(`/${l}/marketplace`) },
+    { key: 'gifts', href: (l) => `/${l}/gifts`, icon: Icon.Gift, match: (p, l) => p.startsWith(`/${l}/gifts`) },
     { key: 'cart', href: (l) => `/${l}`, icon: Icon.Bag, match: () => false, isAction: true },
     { key: 'orders', href: (l) => `/${l}/orders`, icon: Icon.Receipt, match: (p, l) => p.startsWith(`/${l}/orders`) },
     { key: 'profile', href: (l) => `/${l}/profile`, icon: Icon.User, match: (p, l) => p.startsWith(`/${l}/profile`) },

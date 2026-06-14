@@ -29,6 +29,12 @@ interface CheckoutPayload {
   payment_method: PaymentMethod;
   notes?: string;
   items: CheckoutItem[];
+  // Gift orders only — collected on the gift detail page. Ignored (null) for retail.
+  gift?: {
+    recipient_name?: string;
+    gift_message?: string;
+    scheduled_date?: string | null;
+  };
 }
 
 export async function POST(request: Request) {
@@ -138,7 +144,7 @@ export async function POST(request: Request) {
   // -----------------------------------------------------------------
   const { data: store } = await supabase
     .from('stores')
-    .select('id, lat, lng, commission_rate, prep_time_minutes, is_paused, is_active')
+    .select('id, vertical, lat, lng, commission_rate, prep_time_minutes, is_paused, is_active')
     .eq('id', storeId)
     .maybeSingle();
 
@@ -241,6 +247,21 @@ export async function POST(request: Request) {
   const paymentStatus = payload.payment_method === 'cash' ? 'pending' : 'pending';
   const orderStatus = payload.payment_method === 'cash' ? 'placed' : 'pending_payment';
 
+  // Gift fields are persisted only for gift-vertical orders; retail/parcel stay null.
+  const isGift = store.vertical === 'gifts';
+  const scheduledRaw = payload.gift?.scheduled_date;
+  const scheduledDate =
+    isGift && typeof scheduledRaw === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(scheduledRaw)
+      ? scheduledRaw
+      : null;
+  const giftFields = isGift
+    ? {
+        recipient_name: payload.gift?.recipient_name?.trim() || null,
+        gift_message: payload.gift?.gift_message?.trim() || null,
+        scheduled_date: scheduledDate,
+      }
+    : {};
+
   const { data: order, error: orderErr } = await supabase
     .from('orders')
     .insert({
@@ -249,8 +270,10 @@ export async function POST(request: Request) {
       customer_user_id: userId,
       customer_phone: phone,
       customer_name: name,
+      vertical: store.vertical,
       store_id: storeId,
       address_id: address.id,
+      ...giftFields,
       subtotal,
       delivery_fee: feeBreakdown.fee,
       total,

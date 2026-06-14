@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useNativePushRegistration } from './useNativePushRegistration';
 
-type IconKey = 'orders' | 'products' | 'hours' | 'settings' | 'prices' | 'partners' | 'payments' | 'stores' | 'users';
+type IconKey = 'orders' | 'products' | 'hours' | 'settings' | 'prices' | 'partners' | 'payments' | 'stores' | 'users' | 'gifts';
 
 interface NavItem {
   href: string;
@@ -74,6 +74,11 @@ const Icons: Record<IconKey, React.ReactNode> = {
       <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
       <circle cx="9" cy="7" r="4" />
       <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
+  ),
+  gifts: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7S9 2 6.5 4 9 7 12 7Zm0 0s3-5 5.5-3S15 7 12 7Z" />
     </svg>
   ),
 };

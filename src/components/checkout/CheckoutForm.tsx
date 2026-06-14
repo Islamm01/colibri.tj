@@ -27,6 +27,7 @@ export function CheckoutForm({ initialSession }: { initialSession: InitialSessio
   const hasHydrated = useCart((s) => s._hasHydrated);
   const subtotal = useCart(selectSubtotal);
   const clearCart = useCart((s) => s.clear);
+  const giftOptions = useCart((s) => s.giftOptions);
 
   const [deliveryFee, setDeliveryFee] = useState<number>(DELIVERY_BASE_FEE);
   const deliveryFeeController = useRef<AbortController | null>(null);
@@ -147,6 +148,14 @@ export function CheckoutForm({ initialSession }: { initialSession: InitialSessio
           payment_method: payment,
           notes,
           items: items.map((i) => ({ product_id: i.product_id, quantity: i.quantity })),
+          // Gift options (only present for gift carts); the API ignores them for retail.
+          gift: giftOptions
+            ? {
+                recipient_name: giftOptions.recipient_name,
+                gift_message: giftOptions.gift_message,
+                scheduled_date: giftOptions.scheduled_date,
+              }
+            : undefined,
         }),
       });
       const data = await res.json();
@@ -250,6 +259,32 @@ export function CheckoutForm({ initialSession }: { initialSession: InitialSessio
           errors={{ coords: fieldErrors.coords, text: fieldErrors.text }}
         />
       </Section>
+
+      {/* Gift details (only for gift carts) */}
+      {giftOptions && (giftOptions.recipient_name || giftOptions.gift_message || giftOptions.scheduled_date) && (
+        <Section title={t('giftSection')}>
+          <div className="surface rounded-xl p-4 border border-gold-300/10 space-y-1.5 text-[13px]">
+            {giftOptions.recipient_name && (
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="text-cream-100/55">{t('giftRecipient')}</span>
+                <span className="text-cream-100 text-right">{giftOptions.recipient_name}</span>
+              </div>
+            )}
+            {giftOptions.scheduled_date && (
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="text-cream-100/55">{t('giftDate')}</span>
+                <span className="text-cream-100 text-right tabular-nums">{giftOptions.scheduled_date}</span>
+              </div>
+            )}
+            {giftOptions.gift_message && (
+              <div className="pt-1">
+                <span className="text-cream-100/55">{t('giftMessage')}</span>
+                <p className="text-cream-100 mt-0.5 italic leading-snug">«{giftOptions.gift_message}»</p>
+              </div>
+            )}
+          </div>
+        </Section>
+      )}
 
       {/* Payment */}
       <Section title={t('paymentSection')}>

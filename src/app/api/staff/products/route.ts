@@ -21,7 +21,14 @@ export async function GET() {
     .eq('store_id', session.storeId)
     .order('sort_order');
 
-  return NextResponse.json({ products: products ?? [] });
+  // Surface the store's vertical so the editor can show gift-specific fields.
+  const { data: store } = await supabase
+    .from('stores')
+    .select('vertical')
+    .eq('id', session.storeId)
+    .maybeSingle();
+
+  return NextResponse.json({ products: products ?? [], store_vertical: store?.vertical ?? null });
 }
 
 export async function POST(request: Request) {
@@ -43,6 +50,8 @@ export async function POST(request: Request) {
     image_url?: string;
     is_wholesale?: boolean;
     min_quantity?: number | null;
+    occasion?: string[];
+    gift_contents?: string;
   };
   try {
     body = await request.json();
@@ -93,6 +102,8 @@ export async function POST(request: Request) {
       sort_order: nextOrder,
       is_wholesale: body.is_wholesale ?? false,
       min_quantity: body.is_wholesale ? body.min_quantity ?? null : null,
+      occasion: Array.isArray(body.occasion) && body.occasion.length ? body.occasion : null,
+      gift_contents: body.gift_contents?.trim() || null,
     })
     .select('*')
     .single();

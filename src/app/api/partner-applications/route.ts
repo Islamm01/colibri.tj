@@ -14,7 +14,9 @@ interface Payload {
   description?: string;
 }
 
-const VERTICALS = ['fruits', 'pharmacy', 'agro', 'other'];
+// Partner onboarding is for our single direction: Fruits & Dried Fruits
+// (fresh fruit, nuts, dried fruit). No pharmacy/flowers/other.
+const VERTICALS = ['fruits'];
 
 export async function POST(request: Request) {
   let payload: Payload;

@@ -34,6 +34,27 @@ export function ActiveVerticals({ fruitStoreCount }: Props) {
           icon={<ParcelIcon />}
         />
       </div>
+
+      {/* Gifts by Colibri — the premium pillar, full-width */}
+      <Link
+        href={`/${locale}/gifts`}
+        className="group relative block mt-3 surface rounded-[1.5rem] p-5 card-lift overflow-hidden border border-gold-300/[0.18] bg-gradient-to-br from-forest-700/70 to-forest-900/70"
+      >
+        <div className="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-gold-300/[0.08] blur-xl pointer-events-none" />
+        <div className="relative flex items-center gap-4">
+          <span className="w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-br from-gold-300/20 to-gold-300/[0.04] border border-gold-300/20 flex items-center justify-center text-gold-300 transition-transform group-hover:scale-110">
+            <GiftIcon />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-medium tracking-[1.6px] uppercase text-gold-300/80">{tv('gifts.brand')}</p>
+            <h3 className="font-serif text-[18px] text-cream-100 leading-tight mt-0.5">{tv('gifts.title')}</h3>
+            <p className="text-[11.5px] text-cream-100/55 mt-0.5 leading-snug line-clamp-1">{tv('gifts.subtitle')}</p>
+          </div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="text-gold-300 shrink-0">
+            <path d="M5 12h14m-6-6 6 6-6 6" />
+          </svg>
+        </div>
+      </Link>
     </section>
   );
 }
@@ -76,6 +97,14 @@ function ParcelIcon() {
     <svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M42 32V16a2 2 0 0 0-1-1.74l-15-8.5a2 2 0 0 0-2 0l-15 8.5A2 2 0 0 0 8 16v16a2 2 0 0 0 1 1.74l15 8.5a2 2 0 0 0 2 0l15-8.5A2 2 0 0 0 42 32Z" />
       <path d="m8.5 15 15.5 9 15.5-9M24 41V24" />
+    </svg>
+  );
+}
+
+function GiftIcon() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7S9 2 6.5 4 9 7 12 7Zm0 0s3-5 5.5-3S15 7 12 7Z" />
     </svg>
   );
 }

@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { readStaffSession } from '@/lib/staff/session';
+import { normalizePhone } from '@/lib/validation';
+import { provisionStoreOwner, uniqueStoreSlug } from '@/lib/staff/provisioning';
 
 export const dynamic = 'force-dynamic';
+
+// Khujand city centre — sensible default coords for a curated, address-light store.
+const DEFAULT_LAT = 40.2837;
+const DEFAULT_LNG = 69.6219;
 
 async function requireAdmin() {
   const session = await readStaffSession();
@@ -41,6 +47,71 @@ export async function GET() {
     };
   });
   return NextResponse.json({ stores: shaped });
+}
+
+// POST — create the curated "Gifts by Colibri" store + its owner account.
+// The Gifts pillar is curated (not open onboarding), so admins provision it
+// directly here rather than through the partner-application flow.
+export async function POST(request: Request) {
+  const { error } = await requireAdmin();
+  if (error) return error;
+
+  const body = await request.json().catch(() => null);
+  const name = (body?.name ?? '').trim();
+  if (name.length < 2) {
+    return NextResponse.json({ error: 'invalid_name' }, { status: 400 });
+  }
+  const phone = normalizePhone(body?.owner_phone ?? '');
+  if (!phone) {
+    return NextResponse.json({ error: 'invalid_phone' }, { status: 400 });
+  }
+  const ownerName = (body?.owner_name ?? '').trim() || name;
+
+  const commissionRate =
+    body?.commission_rate != null && Number(body.commission_rate) >= 0 && Number(body.commission_rate) <= 1
+      ? Number(body.commission_rate)
+      : 0.1;
+
+  const supabase = getSupabaseAdmin();
+
+  let ownerId: string;
+  let password: string;
+  try {
+    const provisioned = await provisionStoreOwner(supabase, phone, ownerName);
+    ownerId = provisioned.ownerId;
+    password = provisioned.password;
+  } catch (e) {
+    return NextResponse.json(
+      { error: 'user_create_failed', detail: e instanceof Error ? e.message : undefined },
+      { status: 500 },
+    );
+  }
+
+  const { data: store, error: storeErr } = await supabase
+    .from('stores')
+    .insert({
+      vertical: 'gifts',
+      name,
+      slug: uniqueStoreSlug(name),
+      owner_id: ownerId,
+      lat: Number(body?.lat) || DEFAULT_LAT,
+      lng: Number(body?.lng) || DEFAULT_LNG,
+      commission_rate: commissionRate,
+      is_active: true,
+      is_paused: true, // start paused until gift sets are added
+    })
+    .select('id, slug')
+    .single();
+
+  if (storeErr || !store) {
+    return NextResponse.json({ error: 'store_create_failed', detail: storeErr?.message }, { status: 500 });
+  }
+
+  return NextResponse.json({
+    ok: true,
+    store: { id: store.id, slug: store.slug },
+    credentials: { phone, password },
+  });
 }
 
 // PATCH — update a store's status / commission / min order

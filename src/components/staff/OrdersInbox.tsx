@@ -27,6 +27,10 @@ interface InboxOrder {
   store_id: string;
   courier_id: string | null;
   vertical?: string | null;
+  // Gift orders only (null otherwise)
+  recipient_name?: string | null;
+  gift_message?: string | null;
+  scheduled_date?: string | null;
   address: { formatted_address: string; details: string | null } | null;
   items: Array<{
     id: string;
@@ -43,9 +47,11 @@ interface Props {
   showStoreName?: boolean; // operator dashboard shows the store name on each card
   storeId?: string | null; // store_owner: filter realtime by store; operator: omit
   allowManualAssign?: boolean; // operator/admin can manually assign couriers
+  vertical?: string; // filter to a single vertical's order stream (e.g. 'gifts')
+  title?: string; // heading override (defaults to "Заказы")
 }
 
-export function OrdersInbox({ showStoreName = false, storeId = null, allowManualAssign = false }: Props) {
+export function OrdersInbox({ showStoreName = false, storeId = null, allowManualAssign = false, vertical, title }: Props) {
   const [orders, setOrders] = useState<InboxOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<InboxOrder | null>(null);
@@ -55,7 +61,8 @@ export function OrdersInbox({ showStoreName = false, storeId = null, allowManual
 
   async function fetchOrders() {
     try {
-      const res = await fetch('/api/staff/orders', { cache: 'no-store' });
+      const qs = vertical ? `?vertical=${encodeURIComponent(vertical)}` : '';
+      const res = await fetch(`/api/staff/orders${qs}`, { cache: 'no-store' });
       if (!res.ok) return;
       const data = await res.json();
       const fetched: InboxOrder[] = data.orders ?? [];
@@ -126,7 +133,7 @@ export function OrdersInbox({ showStoreName = false, storeId = null, allowManual
   return (
     <div className="px-5 lg:px-7 py-5">
       <div className="flex items-center justify-between mb-5">
-        <h1 className="font-serif text-[24px] text-ink-soft leading-tight">Заказы</h1>
+        <h1 className="font-serif text-[24px] text-ink-soft leading-tight">{title ?? 'Заказы'}</h1>
         {!audioEnabled && (
           <button
             onClick={enableAudio}
@@ -343,6 +350,28 @@ function OrderDetailDrawer({
               <div className="text-[13px] text-ink-soft">{order.address.formatted_address}</div>
               {order.address.details && (
                 <div className="text-[11px] text-ink-muted mt-0.5">{order.address.details}</div>
+              )}
+            </Section>
+          )}
+
+          {(order.recipient_name || order.gift_message || order.scheduled_date) && (
+            <Section title="Подарок">
+              {order.recipient_name && (
+                <div className="text-[13px] text-ink-soft">
+                  <span className="text-ink-faint">Получатель: </span>
+                  {order.recipient_name}
+                </div>
+              )}
+              {order.scheduled_date && (
+                <div className="text-[13px] text-ink-soft mt-0.5">
+                  <span className="text-ink-faint">Дата: </span>
+                  {order.scheduled_date}
+                </div>
+              )}
+              {order.gift_message && (
+                <div className="mt-1.5 px-3 py-2 bg-fig-50/60 rounded-lg text-[13px] text-ink-soft italic leading-snug">
+                  «{order.gift_message}»
+                </div>
               )}
             </Section>
           )}

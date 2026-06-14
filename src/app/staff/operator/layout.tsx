@@ -11,6 +11,7 @@ export default async function OperatorLayout({ children }: { children: React.Rea
       session={{ name: session.name, role: session.role }}
       navItems={[
         { href: '/staff/operator', label: 'Все заказы', icon: 'orders' },
+        { href: '/staff/operator/gifts', label: 'Подарки', icon: 'gifts' },
         { href: '/staff/operator/dispatch', label: 'Диспетчер', icon: 'users' },
         { href: '/staff/operator/prices', label: 'Цены', icon: 'prices' },
       ]}

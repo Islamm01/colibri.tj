@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { CartItem, Product, ProductUnit } from './types';
+import type { CartItem, GiftOptions, Product, ProductUnit } from './types';
 
 // Delivery pricing constants — kept here for now, will move to backend config later.
 export const DELIVERY_BASE_FEE = 15;
@@ -13,6 +13,9 @@ interface CartState {
   storeId: string | null;
   isOpen: boolean;
   _hasHydrated: boolean;
+  // Gift-order options (order-level). Set on the gift detail page; null for
+  // retail/parcel carts. Cleared whenever the cart is cleared or switched.
+  giftOptions: GiftOptions | null;
 
   // Actions
   addItem: (
@@ -22,6 +25,7 @@ interface CartState {
   ) => void;
   removeItem: (productId: string) => void;
   setQuantity: (productId: string, quantity: number) => void;
+  setGiftOptions: (gift: GiftOptions | null) => void;
   clear: () => void;
   openDrawer: () => void;
   closeDrawer: () => void;
@@ -36,6 +40,7 @@ export const useCart = create<CartState>()(
       storeId: null,
       isOpen: false,
       _hasHydrated: false,
+      giftOptions: null,
       _setHasHydrated: (v) => set({ _hasHydrated: v }),
 
       // TODO: future — separate wholesale checkout / quote flow.
@@ -62,9 +67,10 @@ export const useCart = create<CartState>()(
           min_quantity: minQty,
         };
 
-        // If from a different store, replace cart (single-store cart for v1)
+        // If from a different store, replace cart (single-store cart for v1).
+        // Gift options belong to the previous store's cart, so drop them too.
         if (get().storeId && get().storeId !== product.store_id) {
-          set({ items: [newLine], storeId: product.store_id });
+          set({ items: [newLine], storeId: product.store_id, giftOptions: null });
           return;
         }
 
@@ -106,7 +112,9 @@ export const useCart = create<CartState>()(
         });
       },
 
-      clear: () => set({ items: [], storeId: null }),
+      setGiftOptions: (gift) => set({ giftOptions: gift }),
+
+      clear: () => set({ items: [], storeId: null, giftOptions: null }),
       openDrawer: () => set({ isOpen: true }),
       closeDrawer: () => set({ isOpen: false }),
       toggleDrawer: () => set({ isOpen: !get().isOpen }),
@@ -114,7 +122,7 @@ export const useCart = create<CartState>()(
     {
       name: 'colibri-cart',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ items: state.items, storeId: state.storeId }),
+      partialize: (state) => ({ items: state.items, storeId: state.storeId, giftOptions: state.giftOptions }),
       onRehydrateStorage: () => {
         // Returns a callback that runs after hydration attempts —
         // whether or not anything was actually loaded from localStorage.
