@@ -43,18 +43,6 @@ export async function getGiftProducts(
   return (data ?? []) as unknown as Product[];
 }
 
-/**
- * Resolve a category's cover image. Uses the operator-pinned cover
- * (is_category_cover) when present, otherwise falls back to the first
- * available product of that category. Pass the already-fetched product
- * list so this stays a pure, query-free lookup.
- */
-export function giftCategoryCover(products: Product[], type: string): string | null {
-  const pinned = products.find((p) => p.category === type && p.is_category_cover);
-  const fallback = products.find((p) => p.category === type);
-  return (pinned ?? fallback)?.images?.[0]?.url ?? null;
-}
-
 /** A single gift set by id (the route's [slug] segment is the product id). */
 export async function getGiftProduct(
   supabase: ServerClient,

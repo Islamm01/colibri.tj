@@ -1,7 +1,8 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getSupabaseServer, isSupabaseConfigured } from '@/lib/supabase/server';
-import { getGiftProducts, giftCategoryCover } from '@/lib/gifts';
+import { getGiftProducts } from '@/lib/gifts';
 import { GIFT_TYPES, giftTagLabel } from '@/lib/categories';
+import { giftCategoryImage } from '@/lib/category-visuals';
 import type { Product } from '@/lib/types';
 import { GiftCard } from '@/components/gifts/GiftCard';
 import { CategoryTile } from '@/components/ui/CategoryTile';
@@ -27,8 +28,6 @@ export default async function GiftsHomePage({
       products = [];
     }
   }
-
-  const coverFor = (type: string) => giftCategoryCover(products, type);
 
   return (
     <div className="pb-6">
@@ -56,11 +55,9 @@ export default async function GiftsHomePage({
               key={g.key}
               href={`/${locale}/gifts/${g.key}`}
               title={giftTagLabel(g.key, locale)}
-              imageUrl={coverFor(g.key)}
-              seed={`colibri-gift-${g.key}`}
+              image={giftCategoryImage(g.key)}
               glyph={<GiftTypeIcon type={g.key} />}
               ratioClass="aspect-[3/4]"
-              sizes="(max-width: 448px) 33vw, 150px"
             />
           ))}
         </div>

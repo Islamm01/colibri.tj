@@ -1,0 +1,49 @@
+<svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Honey sets">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#123524"/><stop offset="0.55" stop-color="#0B2A1D"/><stop offset="1" stop-color="#071B12"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#F5C766" stop-opacity="0.30"/><stop offset="0.5" stop-color="#C8F169" stop-opacity="0.10"/><stop offset="1" stop-color="#C8F169" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="jar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFD98A"/><stop offset="0.5" stop-color="#F2A93C"/><stop offset="1" stop-color="#D8861F"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0.45" stop-color="#071B12" stop-opacity="0"/><stop offset="1" stop-color="#04130C" stop-opacity="0.66"/></linearGradient>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9"/></filter>
+  </defs>
+
+  <rect width="1000" height="1000" fill="url(#bg)"/>
+  <rect width="1000" height="1000" fill="url(#glow)"/>
+
+  <!-- honeycomb -->
+  <g stroke="#C8F169" stroke-width="5" fill="none" opacity="0.35">
+    <polygon points="760,210 800,233 800,279 760,302 720,279 720,233"/>
+    <polygon points="840,256 880,279 880,325 840,348 800,325 800,279"/>
+    <polygon points="760,302 800,325 800,371 760,394 720,371 720,325"/>
+    <polygon points="200,720 240,743 240,789 200,812 160,789 160,743" opacity="0.6"/>
+  </g>
+
+  <!-- honey dipper drizzle -->
+  <g transform="translate(330 250)" opacity="0.9">
+    <rect x="-8" y="-90" width="16" height="150" rx="8" fill="#C8A24A"/>
+    <g fill="#C8A24A"><circle cx="0" cy="70" r="34"/><circle cx="0" cy="50" r="34"/><circle cx="0" cy="92" r="30"/></g>
+    <path d="M0 120 C 0 180 8 210 8 250" stroke="#F2A93C" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.85"/>
+  </g>
+
+  <!-- jar -->
+  <g transform="translate(520 540)">
+    <ellipse cx="0" cy="220" rx="180" ry="36" fill="#000" opacity="0.22" filter="url(#soft)"/>
+    <rect x="-150" y="-150" width="300" height="120" rx="16" fill="#0A2A1E" opacity="0.0"/>
+    <rect x="-120" y="-150" width="240" height="46" rx="14" fill="#E9F6C9"/>
+    <path d="M-150 -104 H150 C 170 -104 184 -88 184 -66 V150 C 184 186 156 214 120 214 H-120 C -156 214 -184 186 -184 150 V-66 C -184 -88 -170 -104 -150 -104 Z" fill="url(#jar)"/>
+    <ellipse cx="-70" cy="-40" rx="40" ry="80" fill="#FFFFFF" opacity="0.20"/>
+    <rect x="-96" y="40" width="192" height="92" rx="12" fill="#FBEFD0" opacity="0.92"/>
+    <rect x="-72" y="64" width="144" height="10" rx="5" fill="#D8861F" opacity="0.6"/>
+    <rect x="-72" y="88" width="104" height="10" rx="5" fill="#D8861F" opacity="0.45"/>
+  </g>
+
+  <rect width="1000" height="1000" fill="url(#fade)"/>
+  <rect width="1000" height="1000" filter="url(#grain)" opacity="0.05"/>
+</svg>

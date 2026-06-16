@@ -84,8 +84,6 @@ export interface Product {
   // Gifts (Stage B) — only set for products in a 'gifts' vertical store.
   // `category` carries the gift TYPE; `gift_contents` describes what's inside.
   gift_contents: string | null;
-  // Operator-pinned cover for its category (at most one per store+category).
-  is_category_cover: boolean;
 }
 
 // Gift-order options collected on the gift detail page and carried through

@@ -91,14 +91,7 @@ export function ProductsManager() {
                 <SmartImage src={p.images?.[0]?.url} alt={p.name_ru} seed={p.name_ru} fallbackWidth={48} fallbackHeight={48} sizes="48px" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[14px] font-medium text-ink-soft truncate">{p.name_ru}</span>
-                  {p.is_category_cover && (
-                    <span className="shrink-0 text-[9px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full bg-fig-50 text-fig-700">
-                      Обложка
-                    </span>
-                  )}
-                </div>
+                <div className="text-[14px] font-medium text-ink-soft truncate">{p.name_ru}</div>
                 <div className="text-[11px] text-ink-muted truncate">{p.name_tj}</div>
               </div>
               <div className="text-right shrink-0">
@@ -209,7 +202,6 @@ function ProductFormDrawer({
   const [descRu, setDescRu] = useState(product?.description_ru ?? '');
   const [descTj, setDescTj] = useState(product?.description_tj ?? '');
   const [giftContents, setGiftContents] = useState(product?.gift_contents ?? '');
-  const [isCategoryCover, setIsCategoryCover] = useState(product?.is_category_cover ?? false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploaderOpen, setUploaderOpen] = useState(false);
@@ -237,12 +229,11 @@ function ProductFormDrawer({
         stock: stock ? Number(stock) : null,
         is_wholesale: isGift ? false : isWholesale,
         min_quantity: !isGift && isWholesale && minQuantity ? Number(minQuantity) : null,
-        // Gift sets carry a story (description) + contents + optional cover flag.
+        // Gift sets carry a story (description) + contents.
         ...(isGift && {
           description_ru: descRu.trim() || null,
           description_tj: descTj.trim() || null,
           gift_contents: giftContents.trim() || null,
-          is_category_cover: isCategoryCover,
         }),
       };
       const res = product
@@ -361,21 +352,6 @@ function ProductFormDrawer({
                   placeholder="напр. Мёд 0.5 кг, грецкий орех 0.3 кг, курага 0.2 кг"
                   className="form-input resize-none"
                 />
-              </Field>
-              <Field label="Обложка категории">
-                <label className="flex items-start gap-2 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={isCategoryCover}
-                    onChange={(e) => setIsCategoryCover(e.target.checked)}
-                    className="w-4 h-4 accent-fig-600 mt-0.5"
-                  />
-                  <span className="text-[13px] text-ink-soft leading-snug">
-                    Использовать это фото как обложку категории «
-                    {categoryOptions.find((c) => c.value === category)?.label ?? category}». Заменит
-                    текущую обложку этой категории.
-                  </span>
-                </label>
               </Field>
             </>
           )}

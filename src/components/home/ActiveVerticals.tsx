@@ -2,14 +2,13 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import { CategoryTile } from '@/components/ui/CategoryTile';
+import { PILLAR_IMAGES } from '@/lib/category-visuals';
 
 interface Props {
   fruitStoreCount: number;
-  fruitImageUrl?: string | null;
-  giftImageUrl?: string | null;
 }
 
-export function ActiveVerticals({ fruitStoreCount, fruitImageUrl, giftImageUrl }: Props) {
+export function ActiveVerticals({ fruitStoreCount }: Props) {
   const t = useTranslations('home');
   const tv = useTranslations('verticals');
   const locale = useLocale();
@@ -26,17 +25,15 @@ export function ActiveVerticals({ fruitStoreCount, fruitImageUrl, giftImageUrl }
           title={tv('fruits.title')}
           subtitle={tv('fruits.subtitle')}
           stat={tv('fruits.stat1', { count: fruitStoreCount })}
-          imageUrl={fruitImageUrl}
-          seed="colibri-fruits-dried"
+          image={PILLAR_IMAGES.fruits}
           glyph={<BasketIcon />}
-          priority
         />
         <CategoryTile
           href={`/${locale}/parcel`}
           title={tv('parcel.title')}
           subtitle={tv('parcel.subtitle')}
           stat={tv('parcel.stat1')}
-          seed="colibri-parcel-delivery"
+          image={PILLAR_IMAGES.parcel}
           glyph={<ParcelIcon />}
         />
       </div>
@@ -48,12 +45,10 @@ export function ActiveVerticals({ fruitStoreCount, fruitImageUrl, giftImageUrl }
           eyebrow={tv('gifts.brand')}
           title={tv('gifts.title')}
           subtitle={tv('gifts.subtitle')}
-          imageUrl={giftImageUrl}
-          seed="colibri-gifts-premium"
+          image={PILLAR_IMAGES.gifts}
           glyph={<GiftIcon />}
           accent="gold"
           ratioClass="aspect-[16/9]"
-          sizes="(max-width: 448px) 100vw, 420px"
         />
       </div>
     </section>

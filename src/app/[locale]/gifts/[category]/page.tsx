@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getSupabaseServer, isSupabaseConfigured } from '@/lib/supabase/server';
-import { getGiftProducts, giftCategoryCover } from '@/lib/gifts';
+import { getGiftProducts } from '@/lib/gifts';
 import { isGiftType, giftTagLabel } from '@/lib/categories';
+import { giftCategoryImage } from '@/lib/category-visuals';
 import type { Product } from '@/lib/types';
 import { GiftCard } from '@/components/gifts/GiftCard';
-import { SmartImage } from '@/components/images/SmartImage';
 
 export const revalidate = 60;
 
@@ -34,21 +34,14 @@ export default async function GiftCategoryPage({
   }
 
   const title = giftTagLabel(category, locale);
-  const coverUrl = giftCategoryCover(list, category);
 
   return (
     <div className="pb-6">
-      {/* Cinematic category header */}
+      {/* Cinematic category header — curated brand asset */}
       <div className="relative h-44 overflow-hidden bg-gradient-to-br from-forest-700 to-forest-900">
-        <SmartImage
-          src={coverUrl}
-          alt={title}
-          seed={`colibri-gift-${category}`}
-          showGlyph={false}
-          fallbackWidth={800}
-          fallbackHeight={440}
-          sizes="(max-width: 448px) 100vw, 600px"
-          priority
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${giftCategoryImage(category)})` }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-forest-900/92 via-forest-900/35 to-forest-900/25 pointer-events-none" />
         <Link

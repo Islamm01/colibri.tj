@@ -51,7 +51,6 @@ export async function POST(request: Request) {
     is_wholesale?: boolean;
     min_quantity?: number | null;
     gift_contents?: string;
-    is_category_cover?: boolean;
   };
   try {
     body = await request.json();
@@ -87,17 +86,6 @@ export async function POST(request: Request) {
 
   const category = body.category?.trim() || null;
 
-  // At most one cover per (store, category): clear any existing cover for this
-  // category before inserting the new one as cover.
-  if (body.is_category_cover && category) {
-    await supabase
-      .from('products')
-      .update({ is_category_cover: false })
-      .eq('store_id', session.storeId)
-      .eq('category', category)
-      .eq('is_category_cover', true);
-  }
-
   const { data: product, error } = await supabase
     .from('products')
     .insert({
@@ -116,7 +104,6 @@ export async function POST(request: Request) {
       is_wholesale: body.is_wholesale ?? false,
       min_quantity: body.is_wholesale ? body.min_quantity ?? null : null,
       gift_contents: body.gift_contents?.trim() || null,
-      is_category_cover: body.is_category_cover ?? false,
     })
     .select('*')
     .single();
