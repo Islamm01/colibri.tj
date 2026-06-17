@@ -36,14 +36,6 @@ export async function WhyColibri() {
       ring: 'ring-fig-300/20',
       glow: 'shadow-[0_0_18px_-4px_rgba(111,174,155,0.35)]',
     },
-    {
-      key: 'qualityGuarantee',
-      icon: <CheckShieldIcon />,
-      color: 'text-gold-300',
-      bg: 'bg-gold-300/15',
-      ring: 'ring-gold-300/20',
-      glow: 'shadow-[0_0_18px_-4px_rgba(200,241,105,0.35)]',
-    },
   ];
 
   const Card = ({ b }: { b: (typeof benefits)[number] }) => (
@@ -64,9 +56,6 @@ export async function WhyColibri() {
     </div>
   );
 
-  const top = benefits.slice(0, 4);
-  const last = benefits[4];
-
   return (
     <section className="px-5 py-9 animate-fade-up">
       <div className="max-w-md mx-auto">
@@ -80,14 +69,9 @@ export async function WhyColibri() {
         </div>
 
         <div className="grid grid-cols-2 gap-2.5">
-          {top.map((b) => (
+          {benefits.map((b) => (
             <Card key={b.key} b={b} />
           ))}
-          <div className="col-span-2 flex justify-center">
-            <div className="w-[calc(50%-5px)]">
-              <Card b={last} />
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -123,14 +107,6 @@ function TagIcon() {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3.5 3.5h7l9.5 9.5a2 2 0 0 1 0 2.8l-4.2 4.2a2 2 0 0 1-2.8 0L3.5 10.5v-7Z" />
       <circle cx="7.5" cy="7.5" r="1.2" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-function CheckShieldIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4Z" />
-      <path d="m9 12 2 2 4-4" />
     </svg>
   );
 }

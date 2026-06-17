@@ -20,6 +20,7 @@ interface InboxOrder {
   total: number;
   payment_method: PaymentMethod;
   payment_status: 'pending' | 'awaiting_confirmation' | 'paid' | 'failed' | 'refunded';
+  payment_reference: string | null;
   notes: string | null;
   prep_eta_minutes: number | null;
   delivery_eta_minutes: number | null;
@@ -412,30 +413,38 @@ function OrderDetailDrawer({
           </Section>
 
           <Section title="Оплата">
-            <div className="text-[13px] text-ink-soft">
-              {order.payment_method === 'cash'
-                ? 'Наличные'
-                : order.payment_method === 'qr'
-                ? 'QR'
-                : 'Перевод'}
-              {order.payment_status === 'paid' && (
-                <span className="ml-2 text-[11px] text-green-700 bg-green-50 px-1.5 py-0.5 rounded">
-                  Оплачено
-                </span>
-              )}
-              {order.payment_status === 'pending' && order.payment_method !== 'cash' && (
-                <span className="ml-2 text-[11px] text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded">
-                  Ждём оплату
-                </span>
-              )}
-              {order.payment_status === 'awaiting_confirmation' && (
-                <span className="ml-2 text-[11px] text-blue-800 bg-blue-50 px-1.5 py-0.5 rounded">
-                  Клиент оплатил — проверьте
-                </span>
-              )}
+            <div className="flex items-center justify-between">
+              <div className="text-[13px] text-ink-soft">
+                {order.payment_method === 'cash'
+                  ? 'Наличные при доставке'
+                  : order.payment_method === 'qr'
+                  ? 'Онлайн по QR'
+                  : 'Перевод на карту'}
+              </div>
+              <PaymentStatusBadge method={order.payment_method} status={order.payment_status} />
             </div>
+
+            {order.payment_method === 'cash' && (
+              <div className="mt-1.5 text-[11px] text-ink-muted">
+                Курьер получит {Number(order.total).toFixed(0)} сом наличными при доставке.
+              </div>
+            )}
+
             {order.payment_status === 'awaiting_confirmation' && (
-              <PaymentConfirmRow orderId={order.id} onDone={onClose} />
+              <div className="mt-2.5 rounded-xl border border-blue-200 bg-blue-50/60 p-3">
+                <div className="text-[12px] text-blue-900 leading-snug">
+                  Клиент сообщил, что оплатил{' '}
+                  <span className="font-medium tabular-nums">{Number(order.total).toFixed(0)} сом</span>.
+                  Проверьте, что деньги пришли, затем подтвердите — заказ уйдёт в работу.
+                </div>
+                {order.payment_reference && (
+                  <div className="mt-2 text-[11px] text-blue-900/80">
+                    Номер транзакции от клиента:{' '}
+                    <span className="font-mono select-all">{order.payment_reference}</span>
+                  </div>
+                )}
+                <PaymentConfirmRow orderId={order.id} onDone={onClose} />
+              </div>
             )}
           </Section>
 
@@ -600,6 +609,29 @@ function ManualAssignPanel({ orderId, onAssigned }: { orderId: string; onAssigne
   );
 }
 
+function PaymentStatusBadge({
+  method,
+  status,
+}: {
+  method: PaymentMethod;
+  status: InboxOrder['payment_status'];
+}) {
+  if (status === 'paid') {
+    return <span className="text-[11px] text-green-700 bg-green-50 px-2 py-0.5 rounded-full">✓ Оплачено</span>;
+  }
+  if (status === 'awaiting_confirmation') {
+    return <span className="text-[11px] text-blue-800 bg-blue-50 px-2 py-0.5 rounded-full">Проверьте оплату</span>;
+  }
+  if (status === 'pending') {
+    return method === 'cash' ? (
+      <span className="text-[11px] text-ink-muted bg-black/[0.05] px-2 py-0.5 rounded-full">При доставке</span>
+    ) : (
+      <span className="text-[11px] text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full">Ждём оплату</span>
+    );
+  }
+  return null;
+}
+
 function PaymentConfirmRow({ orderId, onDone }: { orderId: string; onDone: () => void }) {
   const [busy, setBusy] = useState(false);
 
@@ -618,20 +650,20 @@ function PaymentConfirmRow({ orderId, onDone }: { orderId: string; onDone: () =>
   }
 
   return (
-    <div className="flex gap-2 mt-2.5">
+    <div className="flex gap-2 mt-3">
       <button
         onClick={() => decide('confirm')}
         disabled={busy}
-        className="flex-1 py-2.5 rounded-lg bg-green-600 text-white text-[12.5px] font-medium disabled:opacity-60"
+        className="flex-1 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white text-[12.5px] font-medium disabled:opacity-60"
       >
         Оплата получена
       </button>
       <button
         onClick={() => decide('reject')}
         disabled={busy}
-        className="px-3.5 py-2.5 rounded-lg border border-red-200 text-red-600 text-[12.5px] font-medium disabled:opacity-60"
+        className="px-3.5 py-2.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 text-[12.5px] font-medium disabled:opacity-60"
       >
-        Нет
+        Не пришла
       </button>
     </div>
   );

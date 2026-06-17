@@ -144,6 +144,8 @@ export function TrackingClient({ code }: { code: string }) {
         paymentMethod={order.payment_method}
         paymentStatus={order.payment_status}
         orderStatus={order.status}
+        amount={order.total}
+        somLabel={tc('som')}
         onConfirmed={fetchOrder}
       />
 

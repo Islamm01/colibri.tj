@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     .from('orders')
     .select(`
       id, public_code, status, customer_name, customer_phone,
-      subtotal, delivery_fee, total, payment_method, payment_status,
+      subtotal, delivery_fee, total, payment_method, payment_status, payment_reference,
       notes, prep_eta_minutes, delivery_eta_minutes,
       created_at, accepted_at, ready_at, picked_up_at, delivered_at,
       store_id, courier_id, vertical,

@@ -162,7 +162,7 @@ export function PriceEditor({ role }: { role: 'admin' | 'operator' }) {
     <div className="px-5 lg:px-7 py-5 max-w-3xl">
       <h1 className="font-serif text-[24px] text-ink-soft leading-tight mb-1">Цены дня</h1>
       <p className="text-[13px] text-ink-muted mb-5">
-        Обновите цены — клиенты видят их на странице «Цены Худжанда». Указывайте диапазон в сомони за кг.
+        Обновите цены — клиенты видят их на странице «Цены на рынке». Указывайте диапазон в сомони за кг.
       </p>
 
       {error && (

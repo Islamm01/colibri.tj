@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase/admin';
+import { markOrderPaid } from '@/lib/orders/payment';
 
 export const dynamic = 'force-dynamic';
 
@@ -72,20 +73,16 @@ export async function POST(request: Request) {
   if (!order) return NextResponse.json({ error: 'order_not_found' }, { status: 404 });
   if (order.payment_status === 'paid') return NextResponse.json({ ok: true, already_paid: true });
 
-  await supabase
-    .from('orders')
-    .update({
-      payment_status: 'paid',
-      payment_confirmed_at: new Date().toISOString(),
-      payment_reference: event.reference ?? null,
-    })
-    .eq('id', order.id);
-
-  await supabase.from('order_events').insert({
-    order_id: order.id,
-    event_type: 'payment.confirmed_by_provider',
-    actor_role: 'system',
-    payload: { reference: event.reference ?? null },
+  // Same release path as a manual staff confirmation: mark paid and, for an
+  // online order still awaiting payment, move it to `placed` + notify the store.
+  await markOrderPaid({
+    orderId: order.id,
+    extraOrderFields: { payment_reference: event.reference ?? null },
+    event: {
+      type: 'payment.confirmed_by_provider',
+      actorRole: 'system',
+      payload: { reference: event.reference ?? null },
+    },
   });
 
   return NextResponse.json({ ok: true });

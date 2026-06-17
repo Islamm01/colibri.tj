@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getSupabaseServer, isSupabaseConfigured } from '@/lib/supabase/server';
+import { isSupabaseConfigured } from '@/lib/supabase/server';
+import { getSupabaseAdmin } from '@/lib/supabase/admin';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,13 +21,20 @@ export async function GET(request: Request) {
   const sinceStr = since.toISOString().slice(0, 10);
 
   try {
-    const supabase = await getSupabaseServer();
-    const { data } = await supabase
+    // Service-role read: published price data is public and this runs
+    // server-side, so it stays correct regardless of RLS (see migration 0022).
+    const supabase = getSupabaseAdmin();
+    const { data, error } = await supabase
       .from('price_index')
       .select('item_key, effective_date, bazaar_low, bazaar_high')
       .eq('is_published', true)
       .gte('effective_date', sinceStr)
       .order('effective_date', { ascending: true });
+
+    if (error) {
+      console.error('[price-index/history] load failed', error.message);
+      return NextResponse.json({ days: [], overall: [], items: {} });
+    }
 
     const rows = data ?? [];
 

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { readStaffSession } from '@/lib/staff/session';
+import { markOrderPaid } from '@/lib/orders/payment';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,23 +35,24 @@ export async function POST(request: Request) {
   if (!order) return NextResponse.json({ error: 'not_found' }, { status: 404 });
 
   if (body.decision === 'confirm') {
-    await supabase
-      .from('orders')
-      .update({
-        payment_status: 'paid',
-        payment_confirmed_at: new Date().toISOString(),
-        payment_confirmed_by: session.userId,
-      })
-      .eq('id', order.id);
-
-    await supabase.from('order_events').insert({
-      order_id: order.id,
-      event_type: 'payment.confirmed_by_staff',
-      actor_id: session.userId,
-      actor_role: session.role,
-      payload: { method: order.payment_method },
+    // Mark paid AND, for an online order still waiting on payment, release it
+    // into the store queue (move to `placed` + notify the store). Shared with
+    // the bank webhook so manual and automatic confirmation behave identically.
+    const result = await markOrderPaid({
+      orderId: order.id,
+      extraOrderFields: { payment_confirmed_by: session.userId },
+      event: {
+        type: 'payment.confirmed_by_staff',
+        actorRole: session.role,
+        actorId: session.userId,
+        payload: { method: order.payment_method },
+      },
     });
-    return NextResponse.json({ ok: true, payment_status: 'paid' });
+    return NextResponse.json({
+      ok: true,
+      payment_status: 'paid',
+      released_to_store: result.releasedToStore,
+    });
   }
 
   // reject -> back to pending so the customer can retry

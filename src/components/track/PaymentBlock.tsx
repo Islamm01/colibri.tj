@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { formatSom } from '@/lib/format';
 import type { OrderStatus, PaymentMethod } from '@/lib/types';
 
 interface Props {
@@ -9,6 +10,8 @@ interface Props {
   paymentMethod: PaymentMethod;
   paymentStatus: 'pending' | 'awaiting_confirmation' | 'paid' | 'failed' | 'refunded';
   orderStatus: OrderStatus;
+  amount: number;
+  somLabel: string;
   onConfirmed: () => void;
 }
 
@@ -21,7 +24,7 @@ interface Settings {
   transfer_note: string | null;
 }
 
-export function PaymentBlock({ publicCode, paymentMethod, paymentStatus, onConfirmed }: Props) {
+export function PaymentBlock({ publicCode, paymentMethod, paymentStatus, amount, somLabel, onConfirmed }: Props) {
   const t = useTranslations('track');
   const [confirming, setConfirming] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -90,6 +93,18 @@ export function PaymentBlock({ publicCode, paymentMethod, paymentStatus, onConfi
       </div>
 
       <div className="p-4">
+        {/* Amount due — the first thing the customer needs to know */}
+        <div className="flex items-baseline justify-between mb-3 pb-3 border-b border-gold-300/10">
+          <span className="text-[12px] text-cream-100/55">{t('amountDue')}</span>
+          <span className="font-serif text-[22px] text-gold-300 tabular-nums leading-none">
+            {formatSom(amount)} <span className="text-[13px] text-cream-100/55 font-sans">{somLabel}</span>
+          </span>
+        </div>
+
+        <p className="text-[12px] text-cream-100/70 leading-relaxed mb-3">
+          {paymentMethod === 'qr' ? t('payHintQr') : t('payHintBank')}
+        </p>
+
         {paymentMethod === 'qr' ? (
           <>
             <div className="flex justify-center mb-3">

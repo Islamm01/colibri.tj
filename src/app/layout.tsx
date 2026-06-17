@@ -26,8 +26,8 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://colibri.tj'),
-  title: 'Colibri — Бозори маҳаллии Хуҷанд',
-  description: 'Меваҳои тоза, чормағз ва расондан дар Хуҷанд. 30 дақиқа, бе бақайдгирӣ.',
+  title: 'Colibri — Бозори маҳаллии маҳсулоти тоза',
+  description: 'Меваҳои тоза, чормағз ва расондани зуд. Бе бақайдгирӣ.',
   appleWebApp: { capable: true, statusBarStyle: 'default', title: 'Colibri' },
   manifest: '/manifest.json',
   icons: {
