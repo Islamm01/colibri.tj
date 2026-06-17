@@ -231,3 +231,19 @@
   .animate-slide-up { animation: slideUp .35s cubic-bezier(0.21,0.61,0.35,1) both; }
   @keyframes glowPulse { 0%,100%{opacity:.6} 50%{opacity:1} }
 }
+
+/* ============================================================
+   ACCESSIBILITY / PERFORMANCE — honour reduced-motion.
+   Users who ask the OS to minimise motion get instant, static
+   surfaces: no entrance staggers, hover lifts, or looping glows.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .card-lift { will-change: auto; }
+  .card-lift:hover { transform: none; }
+}

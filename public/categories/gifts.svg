@@ -1,61 +1,59 @@
 <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Gifts by Colibri">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#103A2B"/>
-      <stop offset="0.55" stop-color="#0A2A20"/>
-      <stop offset="1" stop-color="#06190F"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#0E3326"/>
+      <stop offset="0.5" stop-color="#0A2A1E"/>
+      <stop offset="1" stop-color="#050F0A"/>
     </linearGradient>
-    <radialGradient id="glow" cx="0.5" cy="0.32" r="0.65">
-      <stop offset="0" stop-color="#F0E0A0" stop-opacity="0.30"/>
-      <stop offset="0.45" stop-color="#C8F169" stop-opacity="0.12"/>
-      <stop offset="1" stop-color="#C8F169" stop-opacity="0"/>
+    <radialGradient id="glow" cx="0.66" cy="0.34" r="0.7">
+      <stop offset="0" stop-color="#F1D885" stop-opacity="0.30"/>
+      <stop offset="0.45" stop-color="#D8B85A" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#D8B85A" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="lid" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#E9F6C9"/><stop offset="1" stop-color="#C8F169"/>
+    <linearGradient id="ribA" x1="0" y1="0" x2="1" y2="0.4">
+      <stop offset="0" stop-color="#B98F3C" stop-opacity="0"/>
+      <stop offset="0.4" stop-color="#E7C879"/>
+      <stop offset="0.7" stop-color="#F6EBC0"/>
+      <stop offset="1" stop-color="#C99B3F" stop-opacity="0.2"/>
     </linearGradient>
-    <linearGradient id="box" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#B2E04A"/><stop offset="1" stop-color="#86B82E"/>
-    </linearGradient>
-    <linearGradient id="ribbon" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#F4E9B8"/><stop offset="1" stop-color="#D8B85A"/>
+    <linearGradient id="ribB" x1="0" y1="0" x2="1" y2="0.5">
+      <stop offset="0" stop-color="#8C6A2A" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#D4AE57"/>
+      <stop offset="1" stop-color="#9A7430" stop-opacity="0.1"/>
     </linearGradient>
     <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0.45" stop-color="#06190F" stop-opacity="0"/>
-      <stop offset="1" stop-color="#03110A" stop-opacity="0.68"/>
+      <stop offset="0.4" stop-color="#050F0A" stop-opacity="0"/>
+      <stop offset="1" stop-color="#03100A" stop-opacity="0.7"/>
     </linearGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="20"/></filter>
     <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
-    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="10"/></filter>
   </defs>
 
   <rect width="1000" height="1000" fill="url(#bg)"/>
   <rect width="1000" height="1000" fill="url(#glow)"/>
 
-  <circle cx="500" cy="380" r="230" fill="#D8B85A" opacity="0.10" filter="url(#soft)"/>
+  <!-- warm depth bloom -->
+  <ellipse cx="640" cy="380" rx="320" ry="240" fill="#D8B85A" opacity="0.10" filter="url(#soft)"/>
 
-  <!-- sparkles -->
-  <g fill="#F4E9B8" opacity="0.9">
-    <path d="M250 250 l10 26 26 10 -26 10 -10 26 -10 -26 -26 -10 26 -10 z"/>
-    <path d="M760 300 l8 20 20 8 -20 8 -8 20 -8 -20 -20 -8 20 -8 z" opacity="0.8"/>
-    <path d="M720 560 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6 z" opacity="0.65"/>
-  </g>
+  <!-- soft blurred ribbon behind (depth) -->
+  <path d="M-60 640 C 220 500 420 720 1060 420 L1060 560 C 420 840 220 640 -60 760 Z" fill="url(#ribB)" opacity="0.35" filter="url(#soft)"/>
 
-  <!-- premium gift box -->
-  <g transform="translate(500 540)">
-    <ellipse cx="0" cy="210" rx="220" ry="40" fill="#000" opacity="0.25" filter="url(#soft)"/>
-    <!-- body -->
-    <rect x="-180" y="-40" width="360" height="240" rx="14" fill="url(#box)"/>
-    <!-- lid -->
-    <rect x="-208" y="-92" width="416" height="80" rx="14" fill="url(#lid)"/>
-    <!-- vertical ribbon -->
-    <rect x="-34" y="-92" width="68" height="292" fill="url(#ribbon)" opacity="0.95"/>
-    <!-- bow -->
-    <g transform="translate(0 -96)">
-      <path d="M0 0 C -70 -64 -150 -52 -150 -10 C -150 26 -78 30 0 4 Z" fill="url(#ribbon)"/>
-      <path d="M0 0 C 70 -64 150 -52 150 -10 C 150 26 78 30 0 4 Z" fill="url(#ribbon)"/>
-      <ellipse cx="0" cy="2" rx="26" ry="22" fill="#E9D38A"/>
-    </g>
+  <!-- elegant gold silk ribbons (abstract, no box) -->
+  <path d="M-60 520 C 240 360 440 560 1060 300 L1060 392 C 440 640 240 460 -60 612 Z" fill="url(#ribA)" opacity="0.85"/>
+  <path d="M-60 470 C 240 320 440 510 1060 252 L1060 300 C 440 540 240 380 -60 540 Z" fill="url(#ribB)" opacity="0.6"/>
+  <path d="M-60 610 C 260 470 460 660 1060 410 L1060 470 C 460 700 260 540 -60 668 Z" fill="url(#ribA)" opacity="0.45"/>
+
+  <!-- ribbon highlight edge -->
+  <path d="M-60 520 C 240 360 440 560 1060 300" fill="none" stroke="#FBF1D2" stroke-width="2.5" opacity="0.35"/>
+
+  <!-- faint gold light specks -->
+  <g fill="#F6EBC0">
+    <circle cx="300" cy="300" r="3.5" opacity="0.7"/>
+    <circle cx="760" cy="250" r="2.5" opacity="0.55"/>
+    <circle cx="540" cy="220" r="2" opacity="0.45"/>
+    <circle cx="700" cy="560" r="2.5" opacity="0.4"/>
   </g>
 
   <rect width="1000" height="1000" fill="url(#fade)"/>
-  <rect width="1000" height="1000" filter="url(#grain)" opacity="0.05"/>
+  <rect width="1000" height="1000" filter="url(#grain)" opacity="0.045"/>
 </svg>

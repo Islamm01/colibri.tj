@@ -1,62 +1,59 @@
 <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Parcel delivery and logistics">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#0D3A2C"/>
-      <stop offset="0.55" stop-color="#0A2A20"/>
-      <stop offset="1" stop-color="#061812"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0" stop-color="#0C3A2E"/>
+      <stop offset="0.55" stop-color="#092A20"/>
+      <stop offset="1" stop-color="#05150F"/>
     </linearGradient>
-    <radialGradient id="glow" cx="0.5" cy="0.32" r="0.62">
-      <stop offset="0" stop-color="#7FE3C0" stop-opacity="0.22"/>
-      <stop offset="0.5" stop-color="#C8F169" stop-opacity="0.08"/>
+    <radialGradient id="glow" cx="0.78" cy="0.26" r="0.7">
+      <stop offset="0" stop-color="#7FE3C0" stop-opacity="0.16"/>
+      <stop offset="0.45" stop-color="#C8F169" stop-opacity="0.06"/>
       <stop offset="1" stop-color="#C8F169" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="boxTop" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#EAF3EF"/><stop offset="1" stop-color="#C7D8CF"/>
+    <linearGradient id="route" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#7FE3C0" stop-opacity="0.5"/>
+      <stop offset="0.55" stop-color="#C8F169" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#DBF59A"/>
     </linearGradient>
-    <linearGradient id="boxL" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#D8C7A6"/><stop offset="1" stop-color="#B89E72"/>
-    </linearGradient>
-    <linearGradient id="boxR" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#C2A878"/><stop offset="1" stop-color="#9C8052"/>
-    </linearGradient>
+    <radialGradient id="node" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#DBF59A"/>
+      <stop offset="1" stop-color="#C8F169"/>
+    </radialGradient>
     <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0.45" stop-color="#061812" stop-opacity="0"/>
-      <stop offset="1" stop-color="#03100B" stop-opacity="0.65"/>
+      <stop offset="0.4" stop-color="#05150F" stop-opacity="0"/>
+      <stop offset="1" stop-color="#03100B" stop-opacity="0.7"/>
     </linearGradient>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="halo" x="-120%" y="-120%" width="340%" height="340%"><feGaussianBlur stdDeviation="26"/></filter>
     <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
-    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter>
   </defs>
 
   <rect width="1000" height="1000" fill="url(#bg)"/>
   <rect width="1000" height="1000" fill="url(#glow)"/>
 
-  <circle cx="820" cy="240" r="150" fill="#0A5C46" opacity="0.4" filter="url(#soft)"/>
-  <circle cx="160" cy="780" r="120" fill="#C8F169" opacity="0.05" filter="url(#soft)"/>
-
-  <!-- dashed delivery route -->
-  <path d="M120 720 C 320 560, 380 600, 520 470 S 760 300, 880 300" stroke="#C8F169" stroke-width="5" fill="none" stroke-dasharray="2 26" stroke-linecap="round" opacity="0.55"/>
-  <circle cx="120" cy="720" r="12" fill="#C8F169" opacity="0.8"/>
-
-  <!-- location pin (destination) -->
-  <g transform="translate(880 300)" opacity="0.9">
-    <path d="M0 -64 C 38 -64 60 -38 60 -8 C 60 34 0 86 0 86 C 0 86 -60 34 -60 -8 C -60 -38 -38 -64 0 -64 Z" fill="#C8F169"/>
-    <circle cx="0" cy="-6" r="22" fill="#0A2A20"/>
+  <!-- abstract topographic contours (terrain / map feel, no literal map) -->
+  <g stroke="#5FB98C" fill="none" opacity="0.10" stroke-width="2.5">
+    <path d="M-40 360 C 200 300 360 420 560 360 S 900 250 1080 320"/>
+    <path d="M-40 460 C 220 400 380 520 580 455 S 920 350 1080 415"/>
+    <path d="M-40 560 C 240 505 400 615 600 552 S 940 452 1080 512"/>
+    <path d="M-40 670 C 240 615 420 715 620 655 S 960 560 1080 612"/>
+    <path d="M-40 790 C 260 735 440 825 640 762 S 980 672 1080 720"/>
   </g>
 
-  <!-- isometric parcel -->
-  <g transform="translate(470 470)">
-    <ellipse cx="0" cy="186" rx="200" ry="40" fill="#000000" opacity="0.22" filter="url(#soft)"/>
-    <polygon points="0,-40 175,55 0,150 -175,55" fill="url(#boxTop)"/>
-    <polygon points="-175,55 0,150 0,330 -175,235" fill="url(#boxL)"/>
-    <polygon points="175,55 0,150 0,330 175,235" fill="url(#boxR)"/>
-    <!-- tape -->
-    <polygon points="0,-40 60,-7 0,26 -60,-7" fill="#C8F169" opacity="0.9"/>
-    <polygon points="0,26 0,330 -22,318 -22,15" fill="#B2E04A" opacity="0.6"/>
-    <polygon points="0,26 0,330 22,318 22,15" fill="#97C42F" opacity="0.55"/>
-    <!-- label -->
-    <rect x="-150" y="120" width="86" height="60" rx="6" fill="#EAF3EF" opacity="0.85" transform="skewY(28.5)"/>
-  </g>
+  <!-- delivery route: soft halo underlay + crisp line -->
+  <path d="M150 770 C 360 660 360 470 520 470 C 700 470 700 250 860 270" fill="none" stroke="#C8F169" stroke-width="16" opacity="0.18" filter="url(#halo)" stroke-linecap="round"/>
+  <path d="M150 770 C 360 660 360 470 520 470 C 700 470 700 250 860 270" fill="none" stroke="url(#route)" stroke-width="5.5" stroke-linecap="round"/>
+
+  <!-- origin node -->
+  <circle cx="150" cy="770" r="34" fill="#C8F169" opacity="0.16" filter="url(#soft)"/>
+  <circle cx="150" cy="770" r="11" fill="url(#node)"/>
+  <circle cx="150" cy="770" r="11" fill="none" stroke="#05150F" stroke-width="3" opacity="0.4"/>
+
+  <!-- destination node with pulse ring -->
+  <circle cx="860" cy="270" r="46" fill="#C8F169" opacity="0.18" filter="url(#soft)"/>
+  <circle cx="860" cy="270" r="30" fill="none" stroke="#DBF59A" stroke-width="2.5" opacity="0.5"/>
+  <circle cx="860" cy="270" r="14" fill="url(#node)"/>
 
   <rect width="1000" height="1000" fill="url(#fade)"/>
-  <rect width="1000" height="1000" filter="url(#grain)" opacity="0.05"/>
+  <rect width="1000" height="1000" filter="url(#grain)" opacity="0.045"/>
 </svg>

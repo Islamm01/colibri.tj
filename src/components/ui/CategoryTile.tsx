@@ -11,7 +11,7 @@ import Link from 'next/link';
 //   • a bottom-up legibility scrim so text is always readable (AA)
 //   • an accent wash (emerald depth, or a gold luxe glow for premium)
 //   • a frosted glyph chip, serif title, optional eyebrow/subtitle/stat
-//   • slow image zoom + lift on hover/press
+//   • one subtle lift on hover (GPU transform); no image zoom/scale churn
 // =====================================================================
 
 type Accent = 'emerald' | 'gold';
@@ -51,7 +51,7 @@ export function CategoryTile({
       {/* Curated brand panel */}
       <div className="absolute inset-0">
         <div
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-[1100ms] ease-out group-hover:scale-[1.07]"
+          className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${image})` }}
         />
         {/* Bottom-up legibility scrim */}
@@ -71,7 +71,7 @@ export function CategoryTile({
 
       {/* Frosted glyph chip */}
       {glyph && (
-        <span className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass-dark flex items-center justify-center text-gold-300 transition-transform group-hover:scale-110">
+        <span className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass-dark flex items-center justify-center text-gold-300">
           {glyph}
         </span>
       )}
