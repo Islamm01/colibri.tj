@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { ActiveOrderButton } from './ActiveOrderButton';
 import type { Locale } from '@/i18n/config';
 
 export function Header({ locale }: { locale: Locale }) {
@@ -32,8 +33,9 @@ export function Header({ locale }: { locale: Locale }) {
           <span className="w-[6px] h-[6px] rounded-full bg-gold-300 shadow-[0_0_8px_rgba(200,241,105,0.7)] mb-0.5" />
         </Link>
 
-        {/* Language */}
-        <div className="shrink-0">
+        {/* Active-order shortcut + language */}
+        <div className="shrink-0 flex items-center gap-2">
+          <ActiveOrderButton />
           <LanguageSwitcher currentLocale={locale} />
         </div>
       </div>

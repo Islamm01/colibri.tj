@@ -33,7 +33,7 @@ export async function GET() {
       id, order_id, expires_at, distance_km,
       order:order_id (
         public_code, customer_name, customer_phone, total, payment_method, notes,
-        subtotal, delivery_fee, vertical, parcel_details, cash_payer,
+        subtotal, delivery_fee, courier_earning, vertical, parcel_details, cash_payer,
         store:store_id (name, address, lat, lng),
         address:address_id (formatted_address, details, lat, lng),
         pickup_address:pickup_address_id (formatted_address, details, lat, lng),
@@ -70,7 +70,7 @@ export async function GET() {
   // order was ever returned).
   const { data: history } = await supabase
     .from('orders')
-    .select('id, public_code, status, total, vertical, delivered_at, customer_name')
+    .select('id, public_code, status, total, delivery_fee, courier_earning, vertical, delivered_at, customer_name')
     .eq('courier_id', session.userId)
     .in('status', ['delivered'])
     .order('delivered_at', { ascending: false })

@@ -8,6 +8,7 @@ import {
   distanceKm,
   calculateDeliveryFee,
 } from '@/lib/orders/pricing';
+import { courierEarning, getCourierCommissionRate } from '@/lib/orders/courier-pay';
 import type { PaymentMethod } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -190,6 +191,11 @@ export async function POST(request: Request) {
   const total = subtotal + feeBreakdown.fee;
   const commission = Math.round(subtotal * Number(store.commission_rate) * 100) / 100;
 
+  // Snapshot the courier's share of the delivery fee at the current platform
+  // rate, so later rate changes don't rewrite this order's payout.
+  const courierRate = await getCourierCommissionRate(supabase);
+  const courier_earning = courierEarning(feeBreakdown.fee, courierRate);
+
   // -----------------------------------------------------------------
   // 6. SOFT-ACCOUNT: find or create user
   // -----------------------------------------------------------------
@@ -276,6 +282,7 @@ export async function POST(request: Request) {
       ...giftFields,
       subtotal,
       delivery_fee: feeBreakdown.fee,
+      courier_earning,
       total,
       commission,
       payment_method: payload.payment_method,

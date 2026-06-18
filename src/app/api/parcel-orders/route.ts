@@ -4,6 +4,7 @@ import { writeSession } from '@/lib/session/server';
 import { normalizePhone, isValidName, isValidLatLng } from '@/lib/validation';
 import { generatePublicCode } from '@/lib/orders/pricing';
 import { quoteParcel, validateParcelDistance, type ParcelWeightBand } from '@/lib/orders/parcel-pricing';
+import { courierEarning, getCourierCommissionRate } from '@/lib/orders/courier-pay';
 import type { PaymentMethod } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -189,6 +190,7 @@ async function handleParcelOrder(request: Request) {
 
   // ---------- Create the order ----------
   const publicCode = await generateUniquePublicCode(supabase);
+  const courierRate = await getCourierCommissionRate(supabase);
   const parcelDetails = {
     contents_category: payload.contents_category,
     contents_description: payload.contents_description?.trim() || null,
@@ -214,6 +216,7 @@ async function handleParcelOrder(request: Request) {
       payment_status: payload.payment_method === 'cash' ? 'pending' : 'pending',
       subtotal: 0,
       delivery_fee: quote.total,
+      courier_earning: courierEarning(quote.total, courierRate),
       total: quote.total,
       // For parcels, the "customer" name/phone in the orders table is the sender —
       // that's who placed the order. Couriers see both names via parcel_details.

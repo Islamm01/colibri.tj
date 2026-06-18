@@ -9,10 +9,18 @@ interface HistoryOrder {
   public_code: string;
   status: string;
   total: number;
+  delivery_fee: number;
+  courier_earning: number | null;
   vertical: string | null;
   delivered_at: string | null;
   customer_name: string;
 }
+
+// The courier's payout = their snapshotted share of the delivery fee (set at
+// order time from the platform's commission rate). Falls back to the full
+// delivery fee for any legacy order that predates the snapshot column.
+const earningOf = (o: { courier_earning?: number | null; delivery_fee?: number | null }) =>
+  Math.round(Number(o.courier_earning ?? o.delivery_fee ?? 0));
 
 interface CourierState {
   courier: { status: 'offline' | 'online' | 'on_delivery'; lastLat?: number; lastLng?: number };
@@ -45,6 +53,7 @@ interface OfferData {
     notes: string | null;
     subtotal: number;
     delivery_fee: number;
+    courier_earning: number | null;
     vertical: 'fruits' | 'parcel' | string;
     parcel_details: ParcelDetails | null;
     cash_payer: 'sender' | 'recipient' | null;
@@ -76,6 +85,9 @@ interface ActiveOrder {
 const PING_INTERVAL_ONLINE_MS = 45_000;
 const PING_INTERVAL_DELIVERY_MS = 15_000;
 const STATE_POLL_MS = 30_000; // fallback polling — realtime should beat this
+// Must match OFFER_TIMEOUT_SECONDS in src/lib/dispatch/dispatcher.ts — the
+// courier has this long to accept before the offer auto-expires.
+const OFFER_DURATION_SECONDS = 25;
 
 export function CourierApp({ courierUserId }: { courierUserId: string }) {
   const [state, setState] = useState<CourierState | null>(null);
@@ -362,25 +374,37 @@ export function CourierApp({ courierUserId }: { courierUserId: string }) {
 }
 
 function CourierHistory({ history }: { history: HistoryOrder[] }) {
-  const todayCount = history.filter((h) => {
+  const isToday = (h: HistoryOrder) => {
     if (!h.delivered_at) return false;
-    const d = new Date(h.delivered_at);
-    const now = new Date();
-    return d.toDateString() === now.toDateString();
-  }).length;
+    return new Date(h.delivered_at).toDateString() === new Date().toDateString();
+  };
+  const todayList = history.filter(isToday);
+  const todayEarnings = todayList.reduce((s, h) => s + earningOf(h), 0);
+  const totalEarnings = history.reduce((s, h) => s + earningOf(h), 0);
 
   return (
     <div className="mt-6">
-      <div className="flex items-center justify-between mb-2.5 px-1">
-        <h3 className="text-[12px] font-medium text-ink-subtle tracking-[1.2px] uppercase">
-          История доставок
-        </h3>
-        {todayCount > 0 && (
-          <span className="text-[11px] text-green-700 bg-green-50 px-2 py-0.5 rounded-full font-medium">
-            Сегодня: {todayCount}
-          </span>
-        )}
+      {/* Earnings summary — the courier's takeaway: what they made */}
+      <div className="grid grid-cols-2 gap-2.5 mb-4">
+        <div className="bg-fig-600 rounded-2xl px-4 py-3.5 shadow-card text-white">
+          <div className="text-[10px] uppercase tracking-[1.2px] text-white/70">Заработано сегодня</div>
+          <div className="text-[22px] font-semibold tabular-nums mt-0.5">
+            {todayEarnings} <span className="text-[12px] font-normal text-white/70">сом</span>
+          </div>
+          <div className="text-[11px] text-white/70 mt-0.5">{todayList.length} доставок</div>
+        </div>
+        <div className="bg-white rounded-2xl px-4 py-3.5 shadow-soft border border-black/[0.05]">
+          <div className="text-[10px] uppercase tracking-[1.2px] text-ink-subtle">Всего (последние)</div>
+          <div className="text-[22px] font-semibold text-ink-soft tabular-nums mt-0.5">
+            {totalEarnings} <span className="text-[12px] font-normal text-ink-muted">сом</span>
+          </div>
+          <div className="text-[11px] text-ink-muted mt-0.5">{history.length} доставок</div>
+        </div>
       </div>
+
+      <h3 className="text-[12px] font-medium text-ink-subtle tracking-[1.2px] uppercase mb-2.5 px-1">
+        История доставок
+      </h3>
       <div className="space-y-2">
         {history.map((h) => {
           const when = h.delivered_at
@@ -402,8 +426,11 @@ function CourierHistory({ history }: { history: HistoryOrder[] }) {
                   {h.vertical === 'parcel' ? 'Посылка' : h.customer_name}
                 </div>
               </div>
-              <div className="text-[14px] font-semibold text-fig-800 tabular-nums shrink-0">
-                {h.total} <span className="text-[10px] text-ink-muted font-normal">сом</span>
+              <div className="text-right shrink-0">
+                <div className="text-[14px] font-semibold text-fig-800 tabular-nums">
+                  +{earningOf(h)} <span className="text-[10px] text-ink-muted font-normal">сом</span>
+                </div>
+                <div className="text-[10px] text-ink-faint tabular-nums">заказ {Number(h.total).toFixed(0)}</div>
               </div>
             </div>
           );
@@ -527,7 +554,8 @@ function OfferView({
 
   const order = offer.order;
   const itemCount = order.items.length;
-  const pct = Math.max(0, Math.min(100, (secondsLeft / 15) * 100));
+  const earning = earningOf(order);
+  const pct = Math.max(0, Math.min(100, (secondsLeft / OFFER_DURATION_SECONDS) * 100));
 
   const ring = 2 * Math.PI * 22;
 
@@ -543,8 +571,9 @@ function OfferView({
               Новый заказ
             </div>
             <div className="font-mono text-[13px] mt-2 opacity-90">{order.public_code}</div>
-            <div className="font-serif text-[28px] tabular-nums leading-tight mt-1">
-              {Number(order.total).toFixed(0)} <span className="text-[15px] opacity-80">сом</span>
+            <div className="text-[10px] uppercase tracking-[1.4px] opacity-75 mt-2">Ваш заработок</div>
+            <div className="font-serif text-[28px] tabular-nums leading-tight mt-0.5">
+              +{earning} <span className="text-[15px] opacity-80">сом</span>
             </div>
           </div>
           <div className="relative w-[56px] h-[56px] shrink-0">
@@ -609,20 +638,27 @@ function OfferView({
           </>
         )}
 
-        <Card>
-          <CardLabel>{order.vertical === 'parcel' ? 'Стоимость доставки' : 'Сумма заказа'}</CardLabel>
-          <div className="text-[20px] font-medium text-ink-soft tabular-nums">
-            {Number(order.total).toFixed(0)} сом
+        <Card highlight>
+          <CardLabel>Оплата и заработок</CardLabel>
+          <div className="flex items-baseline justify-between">
+            <span className="text-[13px] text-ink-muted">Ваш заработок за доставку</span>
+            <span className="text-[22px] font-semibold text-fig-800 tabular-nums">+{earning} сом</span>
           </div>
-          <div className="text-[11px] text-ink-muted mt-0.5">
-            {order.payment_method === 'cash'
-              ? order.vertical === 'parcel'
-                ? order.cash_payer === 'recipient'
-                  ? 'Наличные у получателя'
-                  : 'Наличные у отправителя'
-                : 'Наличные при получении'
-              : 'Оплата онлайн'}
+          <div className="mt-2 pt-2 border-t border-black/[0.05] flex items-baseline justify-between">
+            <span className="text-[12px] text-ink-muted">
+              {order.payment_method === 'cash' ? 'Возьмите с клиента' : 'Оплата заказа'}
+            </span>
+            <span className="text-[13px] font-medium text-ink-soft tabular-nums">
+              {order.payment_method === 'cash'
+                ? `${Number(order.total).toFixed(0)} сом наличными`
+                : 'Оплачено онлайн'}
+            </span>
           </div>
+          {order.payment_method === 'cash' && order.vertical === 'parcel' && (
+            <div className="text-[11px] text-ink-muted mt-1">
+              {order.cash_payer === 'recipient' ? 'Платит получатель' : 'Платит отправитель'}
+            </div>
+          )}
         </Card>
       </div>
 
@@ -643,7 +679,7 @@ function OfferView({
           {actionInFlight ? (
             <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : (
-            <>Принять · {Number(order.total).toFixed(0)} сом</>
+            <>Принять · +{earning} сом</>
           )}
         </button>
       </div>

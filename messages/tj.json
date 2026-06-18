@@ -5,7 +5,8 @@
   },
   "header": {
     "location": "Хуҷанд",
-    "changeLocation": "Тағйир додан"
+    "changeLocation": "Тағйир додан",
+    "activeOrder": "Фармоиши ман"
   },
   "nav": {
     "home": "Асосӣ",

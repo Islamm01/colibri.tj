@@ -3,7 +3,20 @@
 import { useEffect, useState } from 'react';
 
 interface Analytics {
-  summary: { totalOrders: number; delivered: number; cancelled: number; revenue: number; aov: number; days: number };
+  summary: {
+    totalOrders: number;
+    delivered: number;
+    cancelled: number;
+    gmv: number;
+    platformIncome: number;
+    goodsCommission: number;
+    deliveryCommission: number;
+    courierPayout: number;
+    deliveryFees: number;
+    aov: number;
+    cancelRate: number;
+    days: number;
+  };
   daily: { date: string; orders: number; revenue: number }[];
   byVertical: Record<string, number>;
   byPayment: Record<string, number>;
@@ -56,12 +69,43 @@ export function AnalyticsDashboard() {
         </div>
       ) : (
         <div className="space-y-4">
-          {/* KPI cards */}
+          {/* Revenue summary — the money picture, broken down so it's clear
+              what's turnover vs. what Colibri actually earns. */}
+          <div className="bg-gradient-to-br from-fig-600 to-fig-800 rounded-2xl p-5 text-white shadow-card">
+            <div className="text-[11px] uppercase tracking-[1.4px] text-white/70">
+              Оборот за {data.summary.days} дн
+            </div>
+            <div className="font-serif text-[34px] tabular-nums leading-none mt-1.5">
+              {data.summary.gmv.toLocaleString('ru')}{' '}
+              <span className="text-[16px] text-white/70">сом</span>
+            </div>
+            <div className="text-[11px] text-white/55 mt-1">
+              сумма всех доставленных заказов
+            </div>
+            <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-white/15">
+              <div>
+                <div className="text-[11px] text-white/70">Доход платформы</div>
+                <div className="text-[19px] font-semibold tabular-nums mt-0.5">
+                  {data.summary.platformIncome.toLocaleString('ru')} <span className="text-[11px] font-normal text-white/60">сом</span>
+                </div>
+                <div className="text-[10px] text-white/50 mt-0.5">комиссия с заказов и доставки</div>
+              </div>
+              <div>
+                <div className="text-[11px] text-white/70">Курьерам</div>
+                <div className="text-[19px] font-semibold tabular-nums mt-0.5">
+                  {data.summary.courierPayout.toLocaleString('ru')} <span className="text-[11px] font-normal text-white/60">сом</span>
+                </div>
+                <div className="text-[10px] text-white/50 mt-0.5">выплаты за доставку</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Operational KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
             <Kpi label="Заказов" value={data.summary.totalOrders} />
             <Kpi label="Доставлено" value={data.summary.delivered} tone="green" />
-            <Kpi label="Выручка" value={`${data.summary.revenue.toLocaleString('ru')} сом`} tone="fig" />
-            <Kpi label="Средний чек" value={`${data.summary.aov} сом`} />
+            <Kpi label="Средний чек" value={`${data.summary.aov.toLocaleString('ru')} сом`} />
+            <Kpi label="Отмены" value={`${data.summary.cancelRate}%`} hint={`${data.summary.cancelled} зак.`} />
           </div>
 
           {/* Daily orders bar chart */}
@@ -69,8 +113,8 @@ export function AnalyticsDashboard() {
             <BarChart values={data.daily.map((d) => d.orders)} labels={data.daily.map((d) => d.date.slice(5))} />
           </Card>
 
-          {/* Revenue line */}
-          <Card title="Выручка по дням (сом)">
+          {/* Daily turnover */}
+          <Card title="Оборот по дням (сом)">
             <BarChart values={data.daily.map((d) => d.revenue)} labels={data.daily.map((d) => d.date.slice(5))} tone="gold" />
           </Card>
 
@@ -107,12 +151,13 @@ export function AnalyticsDashboard() {
   );
 }
 
-function Kpi({ label, value, tone }: { label: string; value: string | number; tone?: 'green' | 'fig' }) {
+function Kpi({ label, value, tone, hint }: { label: string; value: string | number; tone?: 'green' | 'fig'; hint?: string }) {
   const color = tone === 'green' ? 'text-green-700' : tone === 'fig' ? 'text-fig-800' : 'text-ink-soft';
   return (
     <div className="bg-white rounded-2xl border border-black/[0.05] p-4 shadow-soft">
       <div className="text-[11px] text-ink-muted">{label}</div>
       <div className={`text-[20px] font-medium mt-1 tabular-nums ${color}`}>{value}</div>
+      {hint && <div className="text-[10px] text-ink-faint mt-0.5">{hint}</div>}
     </div>
   );
 }

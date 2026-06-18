@@ -9,6 +9,7 @@ import {
   DELIVERY_BASE_FEE,
 } from '@/lib/cart-store';
 import { formatSom } from '@/lib/format';
+import { setActiveOrderCode } from '@/lib/active-order';
 import type { PaymentMethod } from '@/lib/types';
 import { ContactSection, type ContactValue, type RecognizedAddress } from './ContactSection';
 import { AddressPicker, type AddressValue } from './AddressPicker';
@@ -174,6 +175,9 @@ export function CheckoutForm({ initialSession }: { initialSession: InitialSessio
       // a re-render with items=[] which races our router.push and can redirect
       // to /marketplace via the empty-cart useEffect.
       placedOrderRef.current = true;
+      // Remember this order so the header "resume" button can bring the
+      // customer back to live tracking after they leave or lock the phone.
+      setActiveOrderCode(data.order.public_code);
       router.push(`/${locale}/track/${data.order.public_code}`);
       // Defer clearCart by a microtask so the navigation commits first.
       queueMicrotask(() => clearCart());

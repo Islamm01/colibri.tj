@@ -22,7 +22,7 @@ import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { distanceKm } from '@/lib/orders/pricing';
 import { notifyUsers } from '@/lib/push/notify';
 
-export const OFFER_TIMEOUT_SECONDS = 15;
+export const OFFER_TIMEOUT_SECONDS = 25;
 export const SEARCH_RADIUS_KM = 5; // courier must be within this of pickup store
 export const STALE_PING_MINUTES = 5; // courier ping must be fresher than this
 export const MAX_DISPATCH_CYCLES = 10; // give up after this many courier rotations

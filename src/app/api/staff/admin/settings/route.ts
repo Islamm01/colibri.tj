@@ -51,6 +51,7 @@ export async function PATCH(request: Request) {
   const numericKeys = [
     'parcel_base_fare', 'parcel_base_km', 'parcel_per_km', 'parcel_heavy_surcharge',
     'parcel_max_km', 'fruit_delivery_fee', 'fruit_free_delivery_over', 'default_commission_rate',
+    'courier_commission_rate',
   ];
   const update: Record<string, unknown> = {};
   for (const k of numericKeys) {

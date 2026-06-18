@@ -17,7 +17,7 @@ export async function GET(request: Request) {
   const supabase = getSupabaseAdmin();
   const { data: orders } = await supabase
     .from('orders')
-    .select('id, total, status, vertical, created_at, courier_id, payment_method')
+    .select('id, total, subtotal, commission, delivery_fee, courier_earning, status, vertical, created_at, courier_id, payment_method')
     .gte('created_at', since)
     .order('created_at', { ascending: true });
 
@@ -25,8 +25,20 @@ export async function GET(request: Request) {
   const delivered = list.filter((o) => o.status === 'delivered');
   const cancelled = list.filter((o) => o.status === 'cancelled');
 
-  const revenue = delivered.reduce((s, o) => s + Number(o.total || 0), 0);
-  const aov = delivered.length > 0 ? revenue / delivered.length : 0;
+  // GMV = gross value of delivered orders (turnover that flows through the app).
+  // Delivery fees split into the courier's payout and the platform's cut.
+  // Platform income = goods commission + the platform's share of delivery.
+  const gmv = delivered.reduce((s, o) => s + Number(o.total || 0), 0);
+  const goodsCommission = delivered.reduce((s, o) => s + Number(o.commission || 0), 0);
+  const deliveryFees = delivered.reduce((s, o) => s + Number(o.delivery_fee || 0), 0);
+  const courierPayout = delivered.reduce(
+    (s, o) => s + Number(o.courier_earning ?? o.delivery_fee ?? 0),
+    0,
+  );
+  const deliveryCommission = deliveryFees - courierPayout;
+  const platformIncome = goodsCommission + deliveryCommission;
+  const aov = delivered.length > 0 ? gmv / delivered.length : 0;
+  const cancelRate = list.length > 0 ? (cancelled.length / list.length) * 100 : 0;
 
   // Daily series (orders + revenue)
   const dayMap: Record<string, { orders: number; revenue: number }> = {};
@@ -85,8 +97,14 @@ export async function GET(request: Request) {
       totalOrders: list.length,
       delivered: delivered.length,
       cancelled: cancelled.length,
-      revenue: Math.round(revenue),
+      gmv: Math.round(gmv),
+      platformIncome: Math.round(platformIncome),
+      goodsCommission: Math.round(goodsCommission),
+      deliveryCommission: Math.round(deliveryCommission),
+      courierPayout: Math.round(courierPayout),
+      deliveryFees: Math.round(deliveryFees),
       aov: Math.round(aov),
+      cancelRate: Math.round(cancelRate),
       days,
     },
     daily,

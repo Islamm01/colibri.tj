@@ -11,6 +11,7 @@ interface Settings {
   fruit_delivery_fee: number;
   fruit_free_delivery_over: number | null;
   default_commission_rate: number;
+  courier_commission_rate: number;
   support_telegram: string;
 }
 
@@ -57,6 +58,12 @@ export function PlatformSettingsEditor() {
 
   if (loading || !s) return <div className="px-5 lg:px-7 py-6 text-ink-muted text-[13px]">Загрузка...</div>;
 
+  // Live example so the admin sees exactly how the cut splits a delivery fee.
+  const courierRate = s.courier_commission_rate ?? 0.2;
+  const sampleFee = Number(s.fruit_delivery_fee) || 20;
+  const platformCut = Math.round(sampleFee * courierRate * 100) / 100;
+  const courierCut = Math.round((sampleFee - platformCut) * 100) / 100;
+
   return (
     <div className="px-5 lg:px-7 py-5 max-w-2xl">
       <h1 className="font-serif text-[24px] text-ink-soft leading-tight mb-1">Настройки платформы</h1>
@@ -102,10 +109,45 @@ export function PlatformSettingsEditor() {
           </div>
         </Card>
 
+        {/* Courier delivery commission */}
+        <Card title="Комиссия платформы с доставки">
+          <p className="text-[11px] text-ink-faint mb-3">
+            Сколько платформа удерживает с каждой доставки. Остальное получает курьер.
+          </p>
+          <div className="flex gap-2 mb-3">
+            {[10, 20, 30].map((p) => {
+              const active = Math.round(courierRate * 100) === p;
+              return (
+                <button
+                  key={p}
+                  onClick={() => set('courier_commission_rate', p / 100)}
+                  className={`flex-1 py-2.5 rounded-lg text-[13px] font-semibold border transition-all ${
+                    active ? 'bg-fig-50 border-fig-600/40 text-fig-700' : 'bg-white border-black/[0.08] text-ink-muted'
+                  }`}
+                >
+                  {p}%
+                </button>
+              );
+            })}
+          </div>
+          <div className="grid grid-cols-2 gap-3 items-center">
+            <Num
+              label="Своё значение, %"
+              value={Math.round(courierRate * 100)}
+              onChange={(v) => set('courier_commission_rate', Math.min(100, Math.max(0, v)) / 100)}
+            />
+            <div className="text-[11px] text-ink-muted leading-relaxed">
+              Доставка {sampleFee} сом →<br />
+              платформа <span className="font-semibold text-ink-soft">{platformCut} сом</span>, курьер{' '}
+              <span className="font-semibold text-fig-700">{courierCut} сом</span>
+            </div>
+          </div>
+        </Card>
+
         {/* Commission + support */}
         <Card title="Прочее">
           <div className="grid grid-cols-2 gap-3 mb-3">
-            <Num label="Комиссия по умолч. %" value={Math.round(s.default_commission_rate * 100)} onChange={(v) => set('default_commission_rate', v / 100)} />
+            <Num label="Комиссия с товаров, %" value={Math.round(s.default_commission_rate * 100)} onChange={(v) => set('default_commission_rate', v / 100)} />
           </div>
           <label className="block">
             <span className="text-[10px] uppercase tracking-wide text-ink-subtle">Telegram поддержки (без @)</span>

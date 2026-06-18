@@ -5,7 +5,8 @@
   },
   "header": {
     "location": "Худжанд",
-    "changeLocation": "Изменить"
+    "changeLocation": "Изменить",
+    "activeOrder": "Мой заказ"
   },
   "nav": {
     "home": "Главная",

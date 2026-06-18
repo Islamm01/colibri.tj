@@ -7,6 +7,7 @@ import { normalizePhone, isValidName } from '@/lib/validation';
 import { MapPickerModal } from '@/components/checkout/MapPickerModal';
 import { AddressAutocomplete, type ResolvedAddress } from '@/components/geo/AddressAutocomplete';
 import { quoteParcel, validateParcelDistance } from '@/lib/orders/parcel-pricing';
+import { setActiveOrderCode } from '@/lib/active-order';
 import type { PaymentMethod } from '@/lib/types';
 
 interface AddressInput {
@@ -121,6 +122,7 @@ export function ParcelForm({ locale, initialSenderName, initialSenderPhone }: Pr
         setSubmitError(data?.detail ? `${friendly} (${data.detail})` : friendly);
         return;
       }
+      setActiveOrderCode(data.order.public_code);
       router.push(`/${locale}/track/${data.order.public_code}`);
     } catch {
       setSubmitError(t('errors.generic'));
