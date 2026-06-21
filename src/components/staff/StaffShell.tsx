@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useNativePushRegistration } from './useNativePushRegistration';
 
-type IconKey = 'orders' | 'products' | 'hours' | 'settings' | 'prices' | 'partners' | 'payments' | 'stores' | 'users' | 'gifts';
+type IconKey = 'orders' | 'products' | 'hours' | 'settings' | 'prices' | 'partners' | 'payments' | 'payouts' | 'cash' | 'stores' | 'users' | 'gifts';
 
 interface NavItem {
   href: string;
@@ -61,6 +61,21 @@ const Icons: Record<IconKey, React.ReactNode> = {
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <rect x="2" y="5" width="20" height="14" rx="2" />
       <path d="M2 10h20" />
+    </svg>
+  ),
+  payouts: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="6" width="20" height="12" rx="2" />
+      <circle cx="12" cy="12" r="2.5" />
+      <path d="M6 12h.01M18 12h.01" />
+    </svg>
+  ),
+  cash: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="8" cy="8" r="6" />
+      <path d="M18.09 10.37A6 6 0 1 1 10.34 18" />
+      <path d="M7 6h1v4" />
+      <path d="m16.71 13.88.7.71-2.82 2.82" />
     </svg>
   ),
   stores: (

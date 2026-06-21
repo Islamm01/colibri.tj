@@ -33,6 +33,13 @@ export type ProductUnit = 'kg' | 'piece' | 'pack' | 'gram' | 'ton';
 
 export type PaymentMethod = 'cash' | 'qr' | 'bank_transfer';
 
+export type PaymentStatus =
+  | 'pending'
+  | 'awaiting_confirmation'
+  | 'paid'
+  | 'failed'
+  | 'refunded';
+
 export type OpeningHours = Partial<
   Record<'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun', [string, string]>
 >;
@@ -92,6 +99,36 @@ export interface GiftOptions {
   recipient_name: string;
   gift_message: string;
   scheduled_date: string | null; // ISO date (yyyy-mm-dd) or null
+}
+
+// =====================================================================
+// Settlement & payouts (mirrors 0024_settlement.sql)
+// =====================================================================
+
+export type PayoutStatus = 'pending' | 'paid' | 'void';
+
+// One recorded payout to a store. Colibri pays externally; this row is the
+// book entry, not an automated transfer.
+export interface Payout {
+  id: string;
+  store_id: string;
+  amount: number;          // Σ storeEarning settled in this payout
+  order_count: number;
+  period_start: string | null;
+  period_end: string | null;
+  status: PayoutStatus;
+  reference: string | null; // admin-entered bank transfer reference
+  note: string | null;
+  created_by: string | null;
+  created_at: string;
+  paid_at: string | null;
+}
+
+// Per-order settlement marking added to `orders` by 0024. An order is in at
+// most one payout (settled in full, once).
+export interface OrderSettlement {
+  settled_at: string | null;
+  payout_id: string | null;
 }
 
 // Cart items live client-side only (Zustand store) until checkout.

@@ -12,6 +12,7 @@ export default async function StoreLayout({ children }: { children: React.ReactN
       navItems={[
         { href: '/staff/store/orders', label: 'Заказы', icon: 'orders' },
         { href: '/staff/store/products', label: 'Товары', icon: 'products' },
+        { href: '/staff/store/earnings', label: 'Доходы', icon: 'payouts' },
         { href: '/staff/store/hours', label: 'Часы', icon: 'hours' },
         { href: '/staff/store/settings', label: 'Настройки', icon: 'settings' },
       ]}

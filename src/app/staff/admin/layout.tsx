@@ -18,6 +18,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         { href: '/staff/admin/staff', label: 'Сотрудники', icon: 'users' },
         { href: '/staff/admin/prices', label: 'Цены', icon: 'prices' },
         { href: '/staff/admin/payments', label: 'Оплата', icon: 'payments' },
+        { href: '/staff/admin/payouts', label: 'Выплаты', icon: 'payouts' },
+        { href: '/staff/admin/cash', label: 'Наличка', icon: 'cash' },
         { href: '/staff/admin/settings', label: 'Настройки', icon: 'settings' },
       ]}
     >
